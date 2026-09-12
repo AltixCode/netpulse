@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, View } from 'react-native';
 import { Crown } from 'lucide-react-native';
 import { initPurchases, checkIsPro } from '../src/services/purchases';
 import { useNetworkStore } from '../src/store/useNetworkStore';
+import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
 import '../global.css';
 
 export default function RootLayout() {
   const router = useRouter();
   const { isPro, setIsPro } = useNetworkStore();
+  const theme = useTheme();
 
   useEffect(() => {
     initPurchases();
@@ -18,22 +20,35 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <>
-      <StatusBar style="light" />
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
+      <StatusBar style={theme.statusBarStyle} />
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: '#020617' },
-          headerTintColor: '#ffffff',
-          headerTitleStyle: { fontWeight: '700' },
-          contentStyle: { backgroundColor: '#020617' },
+          headerStyle: { backgroundColor: theme.headerBackground },
+          headerTintColor: theme.headerTintColor,
+          headerTitleStyle: { fontWeight: '700', color: theme.text },
+          headerShadowVisible: false,
+          contentStyle: { backgroundColor: theme.background },
           headerRight: () =>
             !isPro ? (
               <TouchableOpacity
                 onPress={() => router.push('/paywall')}
-                className="bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-full flex-row items-center"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                style={{
+                  backgroundColor: theme.warningLight,
+                  borderColor: theme.warning,
+                  borderWidth: 1,
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                  borderRadius: 9999,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
               >
-                <Crown size={14} color="#F59E0B" />
-                <Text className="text-amber-400 text-xs font-bold ml-1.5">{t('proBadge')}</Text>
+                <Crown size={14} color={theme.warning} />
+                <Text style={{ color: theme.warning, fontSize: 12, fontWeight: '700', marginLeft: 6 }}>
+                  {t('proBadge')}
+                </Text>
               </TouchableOpacity>
             ) : null,
         }}
@@ -67,6 +82,6 @@ export default function RootLayout() {
           }}
         />
       </Stack>
-    </>
+    </View>
   );
 }

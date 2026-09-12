@@ -14,21 +14,19 @@ import {
   Router,
   RefreshCw,
   Search,
-  ShieldCheck,
-  Lock,
   Crown,
   Wifi,
-  Sparkles,
-  Info,
 } from 'lucide-react-native';
 import { useNetworkStore } from '../src/store/useNetworkStore';
 import { scanSubnetDevices } from '../src/engine/subnetScanner';
 import { DeviceItemCard } from '../src/components/DeviceItemCard';
 import { PaywallModal } from '../src/components/PaywallModal';
+import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
 
 export default function DevicesScreen() {
   const router = useRouter();
+  const theme = useTheme();
   const {
     devices,
     setDevices,
@@ -74,25 +72,42 @@ export default function DevicesScreen() {
   });
 
   return (
-    <SafeAreaView edges={['bottom']} className="flex-1 bg-slate-950 px-5">
+    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 20 }}>
       {/* Subnet Info Header */}
-      <View className="bg-slate-900 border border-slate-800 rounded-3xl p-5 mt-3 mb-4">
-        <View className="flex-row items-center justify-between mb-3">
-          <View className="flex-row items-center">
-            <View className="bg-emerald-500/20 p-2 rounded-xl mr-2.5">
-              <Wifi size={18} color="#34D399" />
+      <View
+        style={{
+          backgroundColor: theme.card,
+          borderColor: theme.cardBorder,
+          borderWidth: 1,
+          borderRadius: 24,
+          padding: 20,
+          marginTop: 12,
+          marginBottom: 16,
+          shadowColor: '#000000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: theme.isDark ? 0.25 : 0.05,
+          shadowRadius: 8,
+          elevation: 3,
+        }}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ backgroundColor: theme.successLight, padding: 10, borderRadius: 14, marginRight: 12 }}>
+              <Wifi size={18} color={theme.success} />
             </View>
             <View>
-              <Text className="text-white font-bold text-base">{t('localSubnetRange')}</Text>
-              <Text className="text-slate-400 font-mono text-xs">
+              <Text style={{ color: theme.text, fontWeight: '700', fontSize: 16 }}>{t('localSubnetRange')}</Text>
+              <Text style={{ color: theme.textSecondary, fontFamily: 'monospace', fontSize: 12, marginTop: 2 }}>
                 {localIp.split('.').slice(0, 3).join('.')}.0/24
               </Text>
             </View>
           </View>
 
-          <View className="items-end">
-            <Text className="text-slate-400 text-xs font-semibold">{t('gateway')}</Text>
-            <Text className="text-emerald-400 font-mono font-bold text-xs">{gatewayIp}</Text>
+          <View style={{ alignItems: 'flex-end' }}>
+            <Text style={{ color: theme.textMuted, fontSize: 11, fontWeight: '600' }}>{t('gateway')}</Text>
+            <Text style={{ color: theme.success, fontFamily: 'monospace', fontWeight: '800', fontSize: 13, marginTop: 2 }}>
+              {gatewayIp}
+            </Text>
           </View>
         </View>
 
@@ -101,12 +116,21 @@ export default function DevicesScreen() {
           onPress={handleStartScan}
           disabled={isScanningSubnet}
           activeOpacity={0.85}
-          className="bg-emerald-600 active:bg-emerald-500 py-3.5 px-4 rounded-2xl flex-row items-center justify-center shadow-lg shadow-emerald-500/20"
+          style={{
+            backgroundColor: theme.success,
+            paddingVertical: 14,
+            paddingHorizontal: 20,
+            borderRadius: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: 48,
+          }}
         >
           {isScanningSubnet ? (
-            <View className="flex-row items-center">
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <ActivityIndicator size="small" color="#FFFFFF" />
-              <Text className="text-white font-bold text-sm ml-2">
+              <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 14, marginLeft: 8 }}>
                 {t('sweepingSubnet', {
                   current: scanProgress ? scanProgress.current : 0,
                   total: scanProgress ? scanProgress.total : 6,
@@ -116,7 +140,7 @@ export default function DevicesScreen() {
           ) : (
             <>
               <RefreshCw size={16} color="#FFFFFF" />
-              <Text className="text-white font-bold text-base ml-2">
+              <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 15, marginLeft: 8 }}>
                 {devices.length > 0 ? t('rescanDevices') : t('startArpSweep')}
               </Text>
             </>
@@ -129,56 +153,98 @@ export default function DevicesScreen() {
         <TouchableOpacity
           onPress={() => setShowPaywall(true)}
           activeOpacity={0.85}
-          className="bg-gradient-to-r from-amber-500/10 to-blue-500/10 border border-amber-500/30 p-3.5 rounded-2xl mb-4 flex-row items-center justify-between"
+          style={{
+            backgroundColor: theme.warningLight,
+            borderColor: theme.warning,
+            borderWidth: 1,
+            padding: 14,
+            borderRadius: 18,
+            marginBottom: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            minHeight: 52,
+          }}
         >
-          <View className="flex-row items-center flex-1 mr-2">
-            <Crown size={18} color="#F59E0B" />
-            <View className="ml-2.5 flex-1">
-              <Text className="text-white font-bold text-xs">{t('portScannerLocked')}</Text>
-              <Text className="text-slate-400 text-[11px] mt-0.5">
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 8 }}>
+            <Crown size={20} color={theme.warning} />
+            <View style={{ marginLeft: 10, flex: 1 }}>
+              <Text style={{ color: theme.text, fontWeight: '700', fontSize: 13 }}>{t('portScannerLocked')}</Text>
+              <Text style={{ color: theme.textSecondary, fontSize: 11, marginTop: 2 }}>
                 {t('portScannerDesc')}
               </Text>
             </View>
           </View>
-          <View className="bg-amber-500/20 px-2.5 py-1 rounded-full">
-            <Text className="text-amber-400 font-bold text-xs">{t('unlock')}</Text>
+          <View style={{ backgroundColor: theme.warning, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 9999 }}>
+            <Text style={{ color: '#000000', fontWeight: '800', fontSize: 12 }}>{t('unlock')}</Text>
           </View>
         </TouchableOpacity>
       )}
 
-      {/* Search Filter Bar (if devices exist) */}
+      {/* Search Filter Bar */}
       {devices.length > 0 && (
-        <View className="bg-slate-900 border border-slate-800 rounded-2xl px-3.5 py-2 mb-4 flex-row items-center">
-          <Search size={16} color="#64748B" />
+        <View
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.cardBorder,
+            borderWidth: 1,
+            borderRadius: 16,
+            paddingHorizontal: 14,
+            paddingVertical: 10,
+            marginBottom: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          <Search size={16} color={theme.textMuted} />
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholder={t('searchPlaceholder')}
-            placeholderTextColor="#64748B"
-            className="flex-1 text-white text-sm ml-2.5 py-1"
+            placeholderTextColor={theme.textMuted}
+            style={{
+              flex: 1,
+              color: theme.text,
+              fontSize: 14,
+              marginLeft: 10,
+              padding: 0,
+            }}
           />
         </View>
       )}
 
       {/* Device List */}
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 24 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
         {devices.length === 0 && !isScanningSubnet ? (
-          <View className="bg-slate-900/60 border border-slate-800/80 rounded-3xl p-8 items-center justify-center my-6">
-            <View className="bg-slate-800 p-4 rounded-3xl mb-4">
-              <Router size={36} color="#60A5FA" />
+          <View
+            style={{
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+              borderWidth: 1,
+              borderRadius: 24,
+              padding: 32,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginVertical: 24,
+            }}
+          >
+            <View style={{ backgroundColor: theme.primaryLight, padding: 18, borderRadius: 24, marginBottom: 16 }}>
+              <Router size={36} color={theme.primary} />
             </View>
-            <Text className="text-white font-bold text-lg text-center">{t('noDevicesScanned')}</Text>
-            <Text className="text-slate-400 text-xs text-center mt-2 leading-relaxed max-w-xs">
+            <Text style={{ color: theme.text, fontWeight: '800', fontSize: 18, textAlign: 'center' }}>
+              {t('noDevicesScanned')}
+            </Text>
+            <Text style={{ color: theme.textSecondary, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 18, maxWidth: 260 }}>
               {t('noDevicesDesc')}
             </Text>
           </View>
         ) : (
           <>
-            <View className="flex-row items-center justify-between mb-3 px-1">
-              <Text className="text-slate-400 text-xs font-bold uppercase tracking-wider">
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, paddingHorizontal: 4 }}>
+              <Text style={{ color: theme.textMuted, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.8 }}>
                 {t('discoveredHosts', { count: filteredDevices.length })}
               </Text>
-              <Text className="text-slate-500 text-xs">{t('ouiResolved')}</Text>
+              <Text style={{ color: theme.textMuted, fontSize: 11 }}>{t('ouiResolved')}</Text>
             </View>
 
             {filteredDevices.map((device) => (

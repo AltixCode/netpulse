@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Activity, Zap, ShieldCheck } from 'lucide-react-native';
+import { Activity } from 'lucide-react-native';
+import { useTheme } from '../theme/useTheme';
 import { t } from '../i18n';
 
 interface LatencyGaugeProps {
@@ -16,70 +17,156 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
   jitter,
   history,
 }) => {
+  const theme = useTheme();
   const maxPing = Math.max(50, ...history);
 
   const getQualityColor = (ping: number) => {
-    if (ping < 30) return '#34D399'; // Green
-    if (ping < 80) return '#FBBF24'; // Amber
-    return '#F43F5E'; // Rose
+    if (ping < 30) return theme.success;
+    if (ping < 80) return theme.warning;
+    return theme.danger;
   };
 
   return (
-    <View className="bg-slate-900 border border-slate-800 rounded-3xl p-6 mb-5">
+    <View
+      style={{
+        backgroundColor: theme.card,
+        borderColor: theme.cardBorder,
+        borderWidth: 1,
+        borderRadius: 24,
+        padding: 20,
+        marginBottom: 20,
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: theme.isDark ? 0.3 : 0.06,
+        shadowRadius: 12,
+        elevation: 3,
+      }}
+    >
       {/* Top Status */}
-      <View className="flex-row items-center justify-between mb-4">
-        <View className="flex-row items-center">
-          <View className="bg-blue-500/20 p-2 rounded-xl mr-2">
-            <Activity size={18} color="#60A5FA" />
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View
+            style={{
+              backgroundColor: theme.primaryLight,
+              padding: 8,
+              borderRadius: 12,
+              marginRight: 10,
+            }}
+          >
+            <Activity size={18} color={theme.primary} />
           </View>
-          <Text className="text-white font-bold text-base">{t('connectionLatency')}</Text>
+          <Text style={{ color: theme.text, fontSize: 16, fontWeight: '700' }}>
+            {t('connectionLatency')}
+          </Text>
         </View>
-        <View className="flex-row items-center bg-emerald-500/20 px-2.5 py-1 rounded-full border border-emerald-500/30">
-          <View className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5" />
-          <Text className="text-emerald-400 text-xs font-semibold">{t('active')}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: theme.successLight,
+            borderColor: theme.success,
+            borderWidth: 1,
+            paddingHorizontal: 10,
+            paddingVertical: 4,
+            borderRadius: 9999,
+          }}
+        >
+          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: theme.success, marginRight: 6 }} />
+          <Text style={{ color: theme.success, fontSize: 12, fontWeight: '600' }}>
+            {t('active')}
+          </Text>
         </View>
       </View>
 
       {/* Main Ping Number */}
-      <View className="items-center my-3">
-        <View className="flex-row items-baseline">
+      <View style={{ alignItems: 'center', marginVertical: 12 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
           <Text
-            style={{ color: getQualityColor(currentPing) }}
-            className="text-6xl font-mono font-extrabold"
+            style={{
+              color: getQualityColor(currentPing),
+              fontSize: 56,
+              fontWeight: '900',
+              fontVariant: ['tabular-nums'],
+              letterSpacing: -1,
+            }}
           >
             {currentPing}
           </Text>
-          <Text className="text-slate-400 text-xl font-bold ml-1.5 font-mono">ms</Text>
+          <Text
+            style={{
+              color: theme.textSecondary,
+              fontSize: 20,
+              fontWeight: '700',
+              marginLeft: 6,
+            }}
+          >
+            ms
+          </Text>
         </View>
-        <Text className="text-slate-400 text-xs mt-1">{t('rtt')}</Text>
+        <Text style={{ color: theme.textMuted, fontSize: 13, marginTop: 4, fontWeight: '500' }}>
+          {t('rtt')}
+        </Text>
       </View>
 
       {/* Real-time Sparkline Bars */}
-      <View className="h-14 w-full flex-row items-end justify-between space-x-1 my-3 px-2">
+      <View
+        style={{
+          height: 56,
+          width: '100%',
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          marginVertical: 12,
+          paddingHorizontal: 4,
+        }}
+      >
         {history.map((val, idx) => {
           const heightPercent = Math.max(12, Math.min(100, (val / maxPing) * 100));
           return (
             <View
               key={idx}
-              style={{ height: `${heightPercent}%` }}
-              className="flex-1 bg-blue-500 rounded-t-sm"
+              style={{
+                height: `${heightPercent}%`,
+                flex: 1,
+                backgroundColor: theme.primary,
+                marginHorizontal: 1.5,
+                borderTopLeftRadius: 3,
+                borderTopRightRadius: 3,
+                opacity: 0.85,
+              }}
             />
           );
         })}
       </View>
 
       {/* Metrics Row: Average & Jitter */}
-      <View className="flex-row justify-between pt-4 border-t border-slate-800">
-        <View className="items-center flex-1">
-          <Text className="text-slate-500 text-[10px] uppercase font-bold">{t('avgPing')}</Text>
-          <Text className="text-white text-base font-mono font-bold mt-0.5">{averagePing} ms</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingTop: 16,
+          borderTopWidth: 1,
+          borderTopColor: theme.cardBorder,
+        }}
+      >
+        <View style={{ alignItems: 'center', flex: 1 }}>
+          <Text style={{ color: theme.textMuted, fontSize: 11, textTransform: 'uppercase', fontWeight: '700' }}>
+            {t('avgPing')}
+          </Text>
+          <Text style={{ color: theme.text, fontSize: 16, fontWeight: '800', marginTop: 4 }}>
+            {averagePing} ms
+          </Text>
         </View>
 
-        <View className="w-px h-8 bg-slate-800" />
+        <View style={{ width: 1, height: 32, backgroundColor: theme.cardBorder }} />
 
-        <View className="items-center flex-1">
-          <Text className="text-slate-500 text-[10px] uppercase font-bold">{t('jitterVariance')}</Text>
-          <Text className="text-cyan-400 text-base font-mono font-bold mt-0.5">{jitter} ms</Text>
+        <View style={{ alignItems: 'center', flex: 1 }}>
+          <Text style={{ color: theme.textMuted, fontSize: 11, textTransform: 'uppercase', fontWeight: '700' }}>
+            {t('jitterVariance')}
+          </Text>
+          <Text style={{ color: theme.accent, fontSize: 16, fontWeight: '800', marginTop: 4 }}>
+            {jitter} ms
+          </Text>
         </View>
       </View>
     </View>

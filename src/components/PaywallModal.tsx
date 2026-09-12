@@ -19,6 +19,7 @@ import {
 } from 'lucide-react-native';
 import { useNetworkStore } from '../store/useNetworkStore';
 import { purchaseLifetime, restorePurchases } from '../services/purchases';
+import { useTheme } from '../theme/useTheme';
 import { t } from '../i18n';
 
 interface PaywallModalProps {
@@ -27,6 +28,7 @@ interface PaywallModalProps {
 }
 
 export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) => {
+  const theme = useTheme();
   const { setIsPro } = useNetworkStore();
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -73,7 +75,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
 
   const features = [
     {
-      icon: <Activity size={20} color="#38BDF8" />,
+      icon: <Activity size={20} color={theme.accent} />,
       title: t('feat1Title'),
       desc: t('feat1Desc'),
     },
@@ -83,12 +85,12 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
       desc: t('feat2Desc'),
     },
     {
-      icon: <FileSpreadsheet size={20} color="#F59E0B" />,
+      icon: <FileSpreadsheet size={20} color={theme.warning} />,
       title: t('feat3Title'),
       desc: t('feat3Desc'),
     },
     {
-      icon: <ShieldCheck size={20} color="#10B981" />,
+      icon: <ShieldCheck size={20} color={theme.success} />,
       title: t('feat4Title'),
       desc: t('feat4Desc'),
     },
@@ -96,52 +98,87 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
-      <View className="flex-1 bg-black/80 justify-end">
-        <View className="bg-slate-950 border-t border-slate-800 rounded-t-3xl p-6 max-h-[90%]">
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.65)', justifyContent: 'flex-end' }}>
+        <View
+          style={{
+            backgroundColor: theme.background,
+            borderTopColor: theme.cardBorder,
+            borderTopWidth: 1,
+            borderTopLeftRadius: 32,
+            borderTopRightRadius: 32,
+            padding: 24,
+            maxHeight: '90%',
+            shadowColor: '#000000',
+            shadowOffset: { width: 0, height: -4 },
+            shadowOpacity: 0.25,
+            shadowRadius: 16,
+            elevation: 10,
+          }}
+        >
           {/* Header */}
-          <View className="flex-row items-center justify-between mb-4">
-            <View className="flex-row items-center space-x-2">
-              <View className="bg-blue-500/20 p-2 rounded-xl">
-                <Sparkles size={20} color="#60A5FA" />
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ backgroundColor: theme.primaryLight, padding: 8, borderRadius: 12, marginRight: 10 }}>
+                <Sparkles size={20} color={theme.primary} />
               </View>
-              <Text className="text-xl font-extrabold text-white ml-2">{t('paywallTitle')}</Text>
+              <Text style={{ fontSize: 20, fontWeight: '900', color: theme.text }}>{t('paywallTitle')}</Text>
             </View>
             <TouchableOpacity
               onPress={onClose}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              className="bg-slate-900 p-2 rounded-full"
+              hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+              style={{ backgroundColor: theme.card, borderColor: theme.cardBorder, borderWidth: 1, padding: 8, borderRadius: 9999 }}
             >
-              <X size={18} color="#94A3B8" />
+              <X size={18} color={theme.textSecondary} />
             </TouchableOpacity>
           </View>
 
           {/* Anti-Subscription Banner */}
-          <View className="bg-gradient-to-r from-blue-950 to-slate-900 border border-blue-900/60 p-4 rounded-2xl mb-5">
-            <Text className="text-xs font-bold uppercase tracking-wider text-blue-400 mb-1">
+          <View
+            style={{
+              backgroundColor: theme.card,
+              borderColor: theme.primaryBorder,
+              borderWidth: 1.5,
+              padding: 16,
+              borderRadius: 18,
+              marginBottom: 20,
+            }}
+          >
+            <Text style={{ fontSize: 11, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1, color: theme.primary, marginBottom: 4 }}>
               {t('antiSubTitle')}
             </Text>
-            <Text className="text-sm font-semibold text-slate-100 leading-snug">
+            <Text style={{ fontSize: 15, fontWeight: '800', color: theme.text, lineHeight: 20 }}>
               {t('antiSubHeadline')}
             </Text>
           </View>
 
           {/* Features List */}
-          <ScrollView showsVerticalScrollIndicator={false} className="space-y-3.5 mb-5">
+          <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 20 }}>
             {features.map((f, i) => (
-              <View key={i} className="flex-row items-start mb-3">
-                <View className="bg-slate-900 p-2 rounded-xl border border-slate-800 mr-3">
+              <View key={i} style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 14 }}>
+                <View
+                  style={{
+                    backgroundColor: theme.card,
+                    borderColor: theme.cardBorder,
+                    borderWidth: 1,
+                    padding: 8,
+                    borderRadius: 12,
+                    marginRight: 12,
+                  }}
+                >
                   {f.icon}
                 </View>
-                <View className="flex-1">
-                  <Text className="text-white text-sm font-bold">{f.title}</Text>
-                  <Text className="text-slate-400 text-xs mt-0.5 leading-relaxed">{f.desc}</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ color: theme.text, fontSize: 14, fontWeight: '700' }}>{f.title}</Text>
+                  <Text style={{ color: theme.textSecondary, fontSize: 12, marginTop: 2, lineHeight: 16 }}>{f.desc}</Text>
                 </View>
               </View>
             ))}
           </ScrollView>
 
           {errorMsg && (
-            <Text className="text-red-400 text-xs text-center mb-3">{errorMsg}</Text>
+            <Text style={{ color: theme.danger, fontSize: 12, textAlign: 'center', marginBottom: 10, fontWeight: '600' }}>
+              {errorMsg}
+            </Text>
           )}
 
           {/* Purchase Button */}
@@ -149,13 +186,26 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
             onPress={handlePurchase}
             disabled={loading}
             activeOpacity={0.85}
-            className="bg-blue-600 active:bg-blue-500 p-4 rounded-2xl items-center flex-row justify-center shadow-lg shadow-blue-500/20"
+            style={{
+              backgroundColor: theme.primary,
+              paddingVertical: 16,
+              borderRadius: 18,
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              minHeight: 52,
+              shadowColor: theme.primary,
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.25,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
           >
             {loading ? (
               <ActivityIndicator color="#FFFFFF" />
             ) : (
               <>
-                <Text className="text-white font-extrabold text-base mr-2">
+                <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16, marginRight: 8 }}>
                   {t('lifetimeAccess')}
                 </Text>
                 <Check size={18} color="#FFFFFF" strokeWidth={3} />
@@ -164,12 +214,14 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
           </TouchableOpacity>
 
           {/* Restore & Policy Links */}
-          <View className="flex-row items-center justify-center space-x-6 mt-4">
-            <TouchableOpacity onPress={handleRestore} disabled={loading}>
-              <Text className="text-slate-400 text-xs underline">{t('restorePurchases')}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 14 }}>
+            <TouchableOpacity onPress={handleRestore} disabled={loading} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+              <Text style={{ color: theme.textSecondary, fontSize: 12, textDecorationLine: 'underline' }}>
+                {t('restorePurchases')}
+              </Text>
             </TouchableOpacity>
-            <Text className="text-slate-600 text-xs">•</Text>
-            <Text className="text-slate-500 text-xs">{t('oneTimePayment')}</Text>
+            <Text style={{ color: theme.textMuted, fontSize: 12 }}>•</Text>
+            <Text style={{ color: theme.textMuted, fontSize: 12 }}>{t('oneTimePayment')}</Text>
           </View>
         </View>
       </View>

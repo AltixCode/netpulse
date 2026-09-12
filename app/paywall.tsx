@@ -13,10 +13,12 @@ import {
 } from 'lucide-react-native';
 import { useNetworkStore } from '../src/store/useNetworkStore';
 import { purchaseLifetime, restorePurchases } from '../src/services/purchases';
+import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
 
 export default function PaywallScreen() {
   const router = useRouter();
+  const theme = useTheme();
   const { setIsPro } = useNetworkStore();
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -63,7 +65,7 @@ export default function PaywallScreen() {
 
   const features = [
     {
-      icon: <Activity size={20} color="#38BDF8" />,
+      icon: <Activity size={20} color={theme.accent} />,
       title: t('feat1Title'),
       desc: t('feat1Desc'),
     },
@@ -73,82 +75,116 @@ export default function PaywallScreen() {
       desc: t('feat2Desc'),
     },
     {
-      icon: <FileSpreadsheet size={20} color="#F59E0B" />,
+      icon: <FileSpreadsheet size={20} color={theme.warning} />,
       title: t('feat3Title'),
       desc: t('feat3Desc'),
     },
     {
-      icon: <ShieldCheck size={20} color="#10B981" />,
+      icon: <ShieldCheck size={20} color={theme.success} />,
       title: t('feat4Title'),
       desc: t('feat4Desc'),
     },
   ];
 
   return (
-    <View className="flex-1 bg-slate-950 px-6 py-4">
+    <View style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 24, paddingVertical: 16 }}>
       {/* Header */}
-      <View className="flex-row items-center justify-between mt-2 mb-4">
-        <View className="flex-row items-center">
-          <View className="bg-blue-500/20 p-2 rounded-xl mr-2.5">
-            <Sparkles size={20} color="#60A5FA" />
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 8, marginBottom: 16 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ backgroundColor: theme.primaryLight, padding: 10, borderRadius: 14, marginRight: 10 }}>
+            <Sparkles size={20} color={theme.primary} />
           </View>
-          <Text className="text-xl font-extrabold text-white">{t('paywallTitle')}</Text>
+          <Text style={{ fontSize: 20, fontWeight: '900', color: theme.text }}>{t('paywallTitle')}</Text>
         </View>
         <TouchableOpacity
           onPress={() => router.back()}
-          className="bg-slate-900 p-2 rounded-full"
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          style={{ backgroundColor: theme.card, borderColor: theme.cardBorder, borderWidth: 1, padding: 8, borderRadius: 9999 }}
         >
-          <X size={18} color="#94A3B8" />
+          <X size={18} color={theme.textSecondary} />
         </TouchableOpacity>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
         {/* Anti-Subscription Banner */}
-        <View className="bg-gradient-to-br from-blue-950/80 to-slate-900 border border-blue-900/60 p-5 rounded-2xl mb-6">
-          <Text className="text-xs font-bold uppercase tracking-wider text-blue-400 mb-1">
+        <View
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.primaryBorder,
+            borderWidth: 1.5,
+            padding: 20,
+            borderRadius: 20,
+            marginBottom: 24,
+          }}
+        >
+          <Text style={{ fontSize: 11, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1, color: theme.primary, marginBottom: 4 }}>
             {t('antiSubTitle')}
           </Text>
-          <Text className="text-base font-bold text-white leading-snug">
+          <Text style={{ fontSize: 17, fontWeight: '800', color: theme.text, lineHeight: 22 }}>
             {t('antiSubHeadline')}
           </Text>
-          <Text className="text-slate-400 text-xs mt-2 leading-relaxed">
+          <Text style={{ color: theme.textSecondary, fontSize: 13, marginTop: 8, lineHeight: 18 }}>
             {t('antiSubDesc')}
           </Text>
         </View>
 
         {/* Features List */}
-        <View className="space-y-4 mb-6">
+        <View style={{ gap: 16, marginBottom: 24 }}>
           {features.map((f, i) => (
-            <View key={i} className="flex-row items-start mb-4">
-              <View className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 mr-3.5">
+            <View key={i} style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+              <View
+                style={{
+                  backgroundColor: theme.card,
+                  borderColor: theme.cardBorder,
+                  borderWidth: 1,
+                  padding: 10,
+                  borderRadius: 14,
+                  marginRight: 14,
+                }}
+              >
                 {f.icon}
               </View>
-              <View className="flex-1">
-                <Text className="text-white text-sm font-bold">{f.title}</Text>
-                <Text className="text-slate-400 text-xs mt-0.5 leading-relaxed">{f.desc}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: theme.text, fontSize: 15, fontWeight: '700' }}>{f.title}</Text>
+                <Text style={{ color: theme.textSecondary, fontSize: 13, marginTop: 3, lineHeight: 18 }}>{f.desc}</Text>
               </View>
             </View>
           ))}
         </View>
 
         {errorMsg && (
-          <Text className="text-red-400 text-xs text-center mb-3">{errorMsg}</Text>
+          <Text style={{ color: theme.danger, fontSize: 13, textAlign: 'center', marginBottom: 12, fontWeight: '600' }}>
+            {errorMsg}
+          </Text>
         )}
       </ScrollView>
 
       {/* Purchase CTA */}
-      <View className="pt-2 pb-6">
+      <View style={{ paddingTop: 12, paddingBottom: 24 }}>
         <TouchableOpacity
           onPress={handlePurchase}
           disabled={loading}
           activeOpacity={0.85}
-          className="bg-blue-600 active:bg-blue-500 p-4 rounded-2xl items-center flex-row justify-center shadow-lg shadow-blue-500/25"
+          style={{
+            backgroundColor: theme.primary,
+            paddingVertical: 16,
+            borderRadius: 18,
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            minHeight: 52,
+            shadowColor: theme.primary,
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.25,
+            shadowRadius: 8,
+            elevation: 4,
+          }}
         >
           {loading ? (
             <ActivityIndicator color="#FFFFFF" />
           ) : (
             <>
-              <Text className="text-white font-extrabold text-base mr-2">
+              <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16, marginRight: 8 }}>
                 {t('lifetimeAccess')}
               </Text>
               <Check size={18} color="#FFFFFF" strokeWidth={3} />
@@ -156,12 +192,14 @@ export default function PaywallScreen() {
           )}
         </TouchableOpacity>
 
-        <View className="flex-row items-center justify-center space-x-6 mt-4">
-          <TouchableOpacity onPress={handleRestore} disabled={loading}>
-            <Text className="text-slate-400 text-xs underline">{t('restorePurchases')}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 14 }}>
+          <TouchableOpacity onPress={handleRestore} disabled={loading} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+            <Text style={{ color: theme.textSecondary, fontSize: 12, textDecorationLine: 'underline' }}>
+              {t('restorePurchases')}
+            </Text>
           </TouchableOpacity>
-          <Text className="text-slate-600 text-xs">•</Text>
-          <Text className="text-slate-500 text-xs">{t('oneTimePayment')}</Text>
+          <Text style={{ color: theme.textMuted, fontSize: 12 }}>•</Text>
+          <Text style={{ color: theme.textMuted, fontSize: 12 }}>{t('oneTimePayment')}</Text>
         </View>
       </View>
     </View>

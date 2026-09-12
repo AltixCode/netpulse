@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Share,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -14,15 +13,12 @@ import * as Haptics from 'expo-haptics';
 import {
   FileSpreadsheet,
   FileText,
-  Activity,
-  ShieldCheck,
   Crown,
   Lock,
   Share2,
   CheckCircle2,
   AlertTriangle,
   Clock,
-  Sparkles,
 } from 'lucide-react-native';
 import { useNetworkStore } from '../src/store/useNetworkStore';
 import {
@@ -31,10 +27,12 @@ import {
   saveReportFile,
 } from '../src/engine/reportEngine';
 import { PaywallModal } from '../src/components/PaywallModal';
+import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
 
 export default function ReportScreen() {
   const router = useRouter();
+  const theme = useTheme();
   const { benchmark, localIp, gatewayIp, isPro } = useNetworkStore();
   const [exporting, setExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
@@ -46,26 +44,29 @@ export default function ReportScreen() {
       return {
         label: t('gradeC'),
         desc: t('gradeCDesc'),
-        color: '#EF4444',
-        bg: 'bg-red-500/10 border-red-500/30',
-        icon: <AlertTriangle size={18} color="#EF4444" />,
+        color: theme.danger,
+        bg: theme.isDark ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)',
+        border: theme.isDark ? 'rgba(239, 68, 68, 0.35)' : 'rgba(239, 68, 68, 0.25)',
+        icon: <AlertTriangle size={20} color={theme.danger} />,
       };
     }
     if (benchmark.jitter > 15) {
       return {
         label: t('gradeB'),
         desc: t('gradeBDesc'),
-        color: '#F59E0B',
-        bg: 'bg-amber-500/10 border-amber-500/30',
-        icon: <AlertTriangle size={18} color="#F59E0B" />,
+        color: theme.warning,
+        bg: theme.isDark ? 'rgba(245, 158, 11, 0.15)' : 'rgba(245, 158, 11, 0.08)',
+        border: theme.isDark ? 'rgba(245, 158, 11, 0.35)' : 'rgba(245, 158, 11, 0.25)',
+        icon: <AlertTriangle size={20} color={theme.warning} />,
       };
     }
     return {
       label: t('gradeA'),
       desc: t('gradeADesc'),
-      color: '#10B981',
-      bg: 'bg-emerald-500/10 border-emerald-500/30',
-      icon: <CheckCircle2 size={18} color="#10B981" />,
+      color: theme.success,
+      bg: theme.isDark ? 'rgba(16, 185, 129, 0.15)' : 'rgba(16, 185, 129, 0.08)',
+      border: theme.isDark ? 'rgba(16, 185, 129, 0.35)' : 'rgba(16, 185, 129, 0.25)',
+      icon: <CheckCircle2 size={20} color={theme.success} />,
     };
   };
 
@@ -142,70 +143,132 @@ export default function ReportScreen() {
   };
 
   return (
-    <SafeAreaView edges={['bottom']} className="flex-1 bg-slate-950 px-5">
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 24 }}>
+    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 20 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
         {/* Header Info */}
-        <View className="mt-3 mb-4">
-          <View className="flex-row items-center justify-between mb-2">
-            <View className="flex-row items-center">
-              <Clock size={14} color="#94A3B8" />
-              <Text className="text-slate-400 font-mono text-xs ml-1.5">{timestamp}</Text>
+        <View style={{ marginTop: 12, marginBottom: 16 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Clock size={14} color={theme.textMuted} />
+              <Text style={{ color: theme.textSecondary, fontFamily: 'monospace', fontSize: 12, marginLeft: 6 }}>
+                {timestamp}
+              </Text>
             </View>
-            <View className="bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
-              <Text className="text-blue-400 font-mono text-[10px] font-bold">{t('samplesCount')}</Text>
+            <View
+              style={{
+                backgroundColor: theme.primaryLight,
+                borderColor: theme.primaryBorder,
+                borderWidth: 1,
+                paddingHorizontal: 8,
+                paddingVertical: 2,
+                borderRadius: 9999,
+              }}
+            >
+              <Text style={{ color: theme.primary, fontFamily: 'monospace', fontSize: 10, fontWeight: '700' }}>
+                {t('samplesCount')}
+              </Text>
             </View>
           </View>
-          <Text className="text-2xl font-extrabold text-white">{t('diagnosticAudit')}</Text>
-          <Text className="text-slate-400 text-xs mt-1">
+          <Text style={{ fontSize: 24, fontWeight: '900', color: theme.text }}>{t('diagnosticAudit')}</Text>
+          <Text style={{ color: theme.textSecondary, fontSize: 13, marginTop: 4 }}>
             {t('diagnosticDesc')}
           </Text>
         </View>
 
         {/* Stability Rating Card */}
-        <View className={`border rounded-3xl p-5 mb-4 ${rating.bg}`}>
-          <View className="flex-row items-center mb-2">
+        <View
+          style={{
+            backgroundColor: rating.bg,
+            borderColor: rating.border,
+            borderWidth: 1.5,
+            borderRadius: 22,
+            padding: 18,
+            marginBottom: 16,
+          }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
             {rating.icon}
-            <Text className="text-white font-bold text-base ml-2">{rating.label}</Text>
+            <Text style={{ color: theme.text, fontWeight: '800', fontSize: 16, marginLeft: 8 }}>{rating.label}</Text>
           </View>
-          <Text className="text-slate-300 text-xs leading-relaxed">{rating.desc}</Text>
+          <Text style={{ color: theme.textSecondary, fontSize: 13, lineHeight: 18 }}>{rating.desc}</Text>
         </View>
 
         {/* 4-Card Metric Grid */}
-        <View className="flex-row space-x-3 mb-3">
-          <View className="flex-1 bg-slate-900 border border-slate-800 p-4 rounded-2xl mr-1.5">
-            <Text className="text-slate-400 text-xs font-semibold">{t('avgPing')}</Text>
-            <Text className="text-white font-mono font-bold text-2xl mt-1">
+        <View style={{ flexDirection: 'row', gap: 12, marginBottom: 12 }}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+              borderWidth: 1,
+              padding: 16,
+              borderRadius: 18,
+            }}
+          >
+            <Text style={{ color: theme.textSecondary, fontSize: 12, fontWeight: '600' }}>{t('avgPing')}</Text>
+            <Text style={{ color: theme.text, fontFamily: 'monospace', fontWeight: '900', fontSize: 22, marginTop: 4 }}>
               {benchmark.averagePing}
-              <Text className="text-xs text-slate-400"> ms</Text>
+              <Text style={{ fontSize: 12, color: theme.textMuted }}> ms</Text>
             </Text>
           </View>
 
-          <View className="flex-1 bg-slate-900 border border-slate-800 p-4 rounded-2xl ml-1.5">
-            <Text className="text-slate-400 text-xs font-semibold">{t('jitterVariance')}</Text>
-            <Text className="text-amber-400 font-mono font-bold text-2xl mt-1">
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+              borderWidth: 1,
+              padding: 16,
+              borderRadius: 18,
+            }}
+          >
+            <Text style={{ color: theme.textSecondary, fontSize: 12, fontWeight: '600' }}>{t('jitterVariance')}</Text>
+            <Text style={{ color: theme.warning, fontFamily: 'monospace', fontWeight: '900', fontSize: 22, marginTop: 4 }}>
               ±{benchmark.jitter}
-              <Text className="text-xs text-slate-400"> ms</Text>
+              <Text style={{ fontSize: 12, color: theme.textMuted }}> ms</Text>
             </Text>
           </View>
         </View>
 
-        <View className="flex-row space-x-3 mb-5">
-          <View className="flex-1 bg-slate-900 border border-slate-800 p-4 rounded-2xl mr-1.5">
-            <Text className="text-slate-400 text-xs font-semibold">{t('packetLoss')}</Text>
+        <View style={{ flexDirection: 'row', gap: 12, marginBottom: 20 }}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+              borderWidth: 1,
+              padding: 16,
+              borderRadius: 18,
+            }}
+          >
+            <Text style={{ color: theme.textSecondary, fontSize: 12, fontWeight: '600' }}>{t('packetLoss')}</Text>
             <Text
-              className={`font-mono font-bold text-2xl mt-1 ${
-                benchmark.packetLoss > 0 ? 'text-red-400' : 'text-emerald-400'
-              }`}
+              style={{
+                color: benchmark.packetLoss > 0 ? theme.danger : theme.success,
+                fontFamily: 'monospace',
+                fontWeight: '900',
+                fontSize: 22,
+                marginTop: 4,
+              }}
             >
               {benchmark.packetLoss}%
             </Text>
           </View>
 
-          <View className="flex-1 bg-slate-900 border border-slate-800 p-4 rounded-2xl ml-1.5">
-            <Text className="text-slate-400 text-xs font-semibold">{t('cloudflareDns')}</Text>
-            <Text className="text-blue-400 font-mono font-bold text-2xl mt-1">
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+              borderWidth: 1,
+              padding: 16,
+              borderRadius: 18,
+            }}
+          >
+            <Text style={{ color: theme.textSecondary, fontSize: 12, fontWeight: '600' }}>{t('cloudflareDns')}</Text>
+            <Text style={{ color: theme.primary, fontFamily: 'monospace', fontWeight: '900', fontSize: 22, marginTop: 4 }}>
               {benchmark.cloudflarePing}
-              <Text className="text-xs text-slate-400"> ms</Text>
+              <Text style={{ fontSize: 12, color: theme.textMuted }}> ms</Text>
             </Text>
           </View>
         </View>
@@ -215,26 +278,37 @@ export default function ReportScreen() {
           <TouchableOpacity
             onPress={() => setShowPaywall(true)}
             activeOpacity={0.85}
-            className="bg-gradient-to-r from-amber-500/10 to-blue-500/10 border border-amber-500/30 p-4 rounded-2xl mb-5 flex-row items-center justify-between"
+            style={{
+              backgroundColor: theme.warningLight,
+              borderColor: theme.warning,
+              borderWidth: 1,
+              padding: 16,
+              borderRadius: 18,
+              marginBottom: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              minHeight: 52,
+            }}
           >
-            <View className="flex-row items-center flex-1 mr-2">
-              <Crown size={20} color="#F59E0B" />
-              <View className="ml-2.5 flex-1">
-                <Text className="text-white font-bold text-sm">{t('exportLocked')}</Text>
-                <Text className="text-slate-400 text-xs mt-0.5">
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 8 }}>
+              <Crown size={20} color={theme.warning} />
+              <View style={{ marginLeft: 10, flex: 1 }}>
+                <Text style={{ color: theme.text, fontWeight: '700', fontSize: 14 }}>{t('exportLocked')}</Text>
+                <Text style={{ color: theme.textSecondary, fontSize: 12, marginTop: 2 }}>
                   {t('exportLockedDesc')}
                 </Text>
               </View>
             </View>
-            <View className="bg-amber-500/20 px-3 py-1.5 rounded-full">
-              <Text className="text-amber-400 font-bold text-xs">{t('unlock')}</Text>
+            <View style={{ backgroundColor: theme.warning, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 9999 }}>
+              <Text style={{ color: '#000000', fontWeight: '800', fontSize: 12 }}>{t('unlock')}</Text>
             </View>
           </TouchableOpacity>
         )}
 
         {/* Export Actions */}
-        <View className="space-y-3 mb-5">
-          <Text className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1 px-1">
+        <View style={{ gap: 12, marginBottom: 20 }}>
+          <Text style={{ color: theme.textMuted, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 2, paddingHorizontal: 4 }}>
             {t('exportEvidence')}
           </Text>
 
@@ -243,13 +317,26 @@ export default function ReportScreen() {
             onPress={handleExportCsv}
             disabled={exporting}
             activeOpacity={0.85}
-            className="bg-blue-600 active:bg-blue-500 p-4 rounded-2xl flex-row items-center justify-between shadow-lg shadow-blue-500/20 mb-3"
+            style={{
+              backgroundColor: theme.primary,
+              padding: 16,
+              borderRadius: 18,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              minHeight: 56,
+              shadowColor: theme.primary,
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.25,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
           >
-            <View className="flex-row items-center">
-              <FileSpreadsheet size={20} color="#FFFFFF" />
-              <View className="ml-3">
-                <Text className="text-white font-bold text-base">{t('exportCsv')}</Text>
-                <Text className="text-blue-200 text-xs">
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <FileSpreadsheet size={22} color="#FFFFFF" />
+              <View style={{ marginLeft: 12 }}>
+                <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16 }}>{t('exportCsv')}</Text>
+                <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, marginTop: 2 }}>
                   {t('exportCsvDesc')}
                 </Text>
               </View>
@@ -257,55 +344,82 @@ export default function ReportScreen() {
             {exporting ? (
               <ActivityIndicator size="small" color="#FFFFFF" />
             ) : !isPro ? (
-              <Lock size={18} color="#93C5FD" />
+              <Lock size={18} color="rgba(255,255,255,0.7)" />
             ) : (
               <Share2 size={18} color="#FFFFFF" />
             )}
           </TouchableOpacity>
 
-          {/* Export Plain Text / Markdown Summary */}
+          {/* Export Plain Text Summary */}
           <TouchableOpacity
             onPress={handleExportSummary}
             disabled={exporting}
             activeOpacity={0.85}
-            className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex-row items-center justify-between"
+            style={{
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+              borderWidth: 1,
+              padding: 16,
+              borderRadius: 18,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              minHeight: 56,
+            }}
           >
-            <View className="flex-row items-center">
-              <FileText size={20} color="#60A5FA" />
-              <View className="ml-3">
-                <Text className="text-white font-bold text-base">{t('exportSummary')}</Text>
-                <Text className="text-slate-400 text-xs">
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <FileText size={22} color={theme.primary} />
+              <View style={{ marginLeft: 12 }}>
+                <Text style={{ color: theme.text, fontWeight: '700', fontSize: 16 }}>{t('exportSummary')}</Text>
+                <Text style={{ color: theme.textSecondary, fontSize: 12, marginTop: 2 }}>
                   {t('exportSummaryDesc')}
                 </Text>
               </View>
             </View>
             {exporting ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
+              <ActivityIndicator size="small" color={theme.primary} />
             ) : !isPro ? (
-              <Lock size={18} color="#94A3B8" />
+              <Lock size={18} color={theme.textMuted} />
             ) : (
-              <Share2 size={18} color="#94A3B8" />
+              <Share2 size={18} color={theme.textSecondary} />
             )}
           </TouchableOpacity>
         </View>
 
         {/* Audit Samples Table Preview */}
-        <View className="bg-slate-900 border border-slate-800 rounded-3xl p-5">
-          <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-white font-bold text-sm">{t('samplePingHistory')}</Text>
-            <Text className="text-slate-500 font-mono text-xs">{t('targetDns')}</Text>
+        <View
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.cardBorder,
+            borderWidth: 1,
+            borderRadius: 22,
+            padding: 18,
+          }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+            <Text style={{ color: theme.text, fontWeight: '800', fontSize: 15 }}>{t('samplePingHistory')}</Text>
+            <Text style={{ color: theme.textMuted, fontFamily: 'monospace', fontSize: 12 }}>{t('targetDns')}</Text>
           </View>
 
-          <View className="space-y-2">
+          <View style={{ gap: 8 }}>
             {benchmark.history.map((ping, i) => (
               <View
                 key={i}
-                className="flex-row items-center justify-between py-1.5 border-b border-slate-800/60"
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingVertical: 8,
+                  borderBottomWidth: i < benchmark.history.length - 1 ? 1 : 0,
+                  borderBottomColor: theme.cardBorder,
+                }}
               >
-                <Text className="text-slate-400 font-mono text-xs">
+                <Text style={{ color: theme.textSecondary, fontFamily: 'monospace', fontSize: 12 }}>
                   {t('pingNum', { number: i + 1 })}
                 </Text>
-                <Text className="text-white font-mono font-bold text-xs">{ping} ms</Text>
+                <Text style={{ color: theme.text, fontFamily: 'monospace', fontWeight: '800', fontSize: 13 }}>
+                  {ping} ms
+                </Text>
               </View>
             ))}
           </View>

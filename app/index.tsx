@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import {
-  Activity,
   Sparkles,
-  Wifi,
   Router,
   FileSpreadsheet,
   ArrowRight,
@@ -17,13 +15,14 @@ import {
 import { useNetworkStore } from '../src/store/useNetworkStore';
 import { runNetworkBenchmark } from '../src/engine/pingEngine';
 import { LatencyGauge } from '../src/components/LatencyGauge';
+import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const theme = useTheme();
   const {
     benchmark,
-    localIp,
     isBenchmarking,
     setBenchmark,
     setIsBenchmarking,
@@ -44,20 +43,33 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView edges={['bottom']} className="flex-1 bg-slate-950 px-5">
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 24 }}>
+    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 20 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
         {/* Header Hero */}
-        <View className="mt-4 mb-5">
-          <View className="inline-flex self-start bg-blue-500/10 border border-blue-500/30 px-3 py-1 rounded-full mb-3 flex-row items-center">
-            <Sparkles size={12} color="#60A5FA" />
-            <Text className="text-blue-400 text-xs font-semibold ml-1.5">
+        <View style={{ marginTop: 12, marginBottom: 20 }}>
+          <View
+            style={{
+              alignSelf: 'flex-start',
+              backgroundColor: theme.primaryLight,
+              borderColor: theme.primaryBorder,
+              borderWidth: 1,
+              paddingHorizontal: 12,
+              paddingVertical: 5,
+              borderRadius: 9999,
+              marginBottom: 12,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <Sparkles size={13} color={theme.primary} />
+            <Text style={{ color: theme.primary, fontSize: 12, fontWeight: '700', marginLeft: 6 }}>
               {t('heroBadge')}
             </Text>
           </View>
-          <Text className="text-3xl font-extrabold text-white tracking-tight">
+          <Text style={{ fontSize: 28, fontWeight: '900', color: theme.text, letterSpacing: -0.5 }}>
             {t('heroTitle')}
           </Text>
-          <Text className="text-slate-400 text-sm mt-1.5 leading-relaxed">
+          <Text style={{ color: theme.textSecondary, fontSize: 14, marginTop: 6, lineHeight: 20 }}>
             {t('heroSubtitle')}
           </Text>
         </View>
@@ -75,100 +87,176 @@ export default function HomeScreen() {
           onPress={handleRunTest}
           disabled={isBenchmarking}
           activeOpacity={0.85}
-          className="bg-blue-600 active:bg-blue-500 py-3.5 px-4 rounded-2xl flex-row items-center justify-center shadow-lg shadow-blue-500/20 mb-5"
+          style={{
+            backgroundColor: theme.primary,
+            paddingVertical: 16,
+            paddingHorizontal: 20,
+            borderRadius: 18,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 20,
+            minHeight: 52,
+            shadowColor: theme.primary,
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.25,
+            shadowRadius: 8,
+            elevation: 4,
+          }}
         >
           {isBenchmarking ? (
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
             <>
-              <RefreshCw size={16} color="#FFFFFF" />
-              <Text className="text-white font-bold text-base ml-2">{t('benchmarkNow')}</Text>
+              <RefreshCw size={18} color="#FFFFFF" />
+              <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16, marginLeft: 8 }}>
+                {t('benchmarkNow')}
+              </Text>
             </>
           )}
         </TouchableOpacity>
 
         {/* DNS Comparison Grid */}
-        <View className="bg-slate-900 border border-slate-800 rounded-3xl p-5 mb-5">
-          <View className="flex-row items-center mb-3">
-            <Globe size={18} color="#60A5FA" />
-            <Text className="text-white font-bold text-sm ml-2">{t('dnsBackbone')}</Text>
+        <View
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.cardBorder,
+            borderWidth: 1,
+            borderRadius: 24,
+            padding: 20,
+            marginBottom: 20,
+          }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 14 }}>
+            <Globe size={18} color={theme.primary} />
+            <Text style={{ color: theme.text, fontWeight: '700', fontSize: 15, marginLeft: 8 }}>
+              {t('dnsBackbone')}
+            </Text>
           </View>
 
-          <View className="flex-row space-x-3">
-            <View className="flex-1 bg-slate-950 border border-slate-800 p-3.5 rounded-2xl mr-2">
-              <Text className="text-slate-400 text-xs font-semibold">Cloudflare 1.1.1.1</Text>
-              <Text className="text-white font-mono font-bold text-lg mt-1">
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: theme.background,
+                borderColor: theme.cardBorder,
+                borderWidth: 1,
+                padding: 14,
+                borderRadius: 16,
+              }}
+            >
+              <Text style={{ color: theme.textSecondary, fontSize: 12, fontWeight: '600' }}>Cloudflare 1.1.1.1</Text>
+              <Text style={{ color: theme.text, fontSize: 20, fontWeight: '800', marginVertical: 4 }}>
                 {benchmark.cloudflarePing} ms
               </Text>
-              <Text className="text-emerald-400 text-[10px] mt-0.5">{t('primaryResolver')}</Text>
+              <Text style={{ color: theme.success, fontSize: 11, fontWeight: '600' }}>{t('primaryResolver')}</Text>
             </View>
 
-            <View className="flex-1 bg-slate-950 border border-slate-800 p-3.5 rounded-2xl ml-2">
-              <Text className="text-slate-400 text-xs font-semibold">Google 8.8.8.8</Text>
-              <Text className="text-white font-mono font-bold text-lg mt-1">
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: theme.background,
+                borderColor: theme.cardBorder,
+                borderWidth: 1,
+                padding: 14,
+                borderRadius: 16,
+              }}
+            >
+              <Text style={{ color: theme.textSecondary, fontSize: 12, fontWeight: '600' }}>Google 8.8.8.8</Text>
+              <Text style={{ color: theme.text, fontSize: 20, fontWeight: '800', marginVertical: 4 }}>
                 {benchmark.googlePing} ms
               </Text>
-              <Text className="text-slate-500 text-[10px] mt-0.5">{t('secondaryFallback')}</Text>
+              <Text style={{ color: theme.textMuted, fontSize: 11, fontWeight: '500' }}>{t('secondaryFallback')}</Text>
             </View>
           </View>
         </View>
 
         {/* Navigation Action Cards */}
-        <View className="space-y-3 mb-5">
+        <View style={{ gap: 12, marginBottom: 24 }}>
           {/* Subnet Scanner Card */}
           <TouchableOpacity
             onPress={() => router.push('/devices')}
             activeOpacity={0.8}
-            className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex-row items-center justify-between mb-3"
+            style={{
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+              borderWidth: 1,
+              padding: 16,
+              borderRadius: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              minHeight: 64,
+            }}
           >
-            <View className="flex-row items-center flex-1 mr-3">
-              <View className="bg-emerald-500/15 p-3 rounded-2xl mr-3">
-                <Router size={22} color="#34D399" />
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 12 }}>
+              <View style={{ backgroundColor: theme.successLight, padding: 12, borderRadius: 16, marginRight: 14 }}>
+                <Router size={22} color={theme.success} />
               </View>
-              <View className="flex-1">
-                <Text className="text-white font-bold text-base">{t('subnetCardTitle')}</Text>
-                <Text className="text-slate-400 text-xs mt-0.5">
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: theme.text, fontWeight: '700', fontSize: 16 }}>{t('subnetCardTitle')}</Text>
+                <Text style={{ color: theme.textSecondary, fontSize: 13, marginTop: 2 }}>
                   {t('subnetCardDesc')}
                 </Text>
               </View>
             </View>
-            <ArrowRight size={18} color="#94A3B8" />
+            <ArrowRight size={18} color={theme.textMuted} />
           </TouchableOpacity>
 
           {/* ISP Audit Report Card */}
           <TouchableOpacity
             onPress={() => router.push('/report')}
             activeOpacity={0.8}
-            className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex-row items-center justify-between"
+            style={{
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+              borderWidth: 1,
+              padding: 16,
+              borderRadius: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              minHeight: 64,
+            }}
           >
-            <View className="flex-row items-center flex-1 mr-3">
-              <View className="bg-amber-500/15 p-3 rounded-2xl mr-3">
-                <FileSpreadsheet size={22} color="#FBBF24" />
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 12 }}>
+              <View style={{ backgroundColor: theme.warningLight, padding: 12, borderRadius: 16, marginRight: 14 }}>
+                <FileSpreadsheet size={22} color={theme.warning} />
               </View>
-              <View className="flex-1">
-                <Text className="text-white font-bold text-base">{t('ispCardTitle')}</Text>
-                <Text className="text-slate-400 text-xs mt-0.5">
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: theme.text, fontWeight: '700', fontSize: 16 }}>{t('ispCardTitle')}</Text>
+                <Text style={{ color: theme.textSecondary, fontSize: 13, marginTop: 2 }}>
                   {t('ispCardDesc')}
                 </Text>
               </View>
             </View>
-            <ArrowRight size={18} color="#94A3B8" />
+            <ArrowRight size={18} color={theme.textMuted} />
           </TouchableOpacity>
         </View>
 
         {/* Architectural Guarantees */}
-        <View className="space-y-3">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+        <View>
+          <Text style={{ fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.8, color: theme.textMuted, marginBottom: 10 }}>
             {t('auditGuarantees')}
           </Text>
 
-          <View className="bg-slate-900/60 border border-slate-800/80 p-4 rounded-2xl flex-row items-start">
-            <View className="bg-blue-500/10 p-2 rounded-xl mr-3">
-              <ShieldCheck size={18} color="#60A5FA" />
+          <View
+            style={{
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+              borderWidth: 1,
+              padding: 16,
+              borderRadius: 20,
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+            }}
+          >
+            <View style={{ backgroundColor: theme.primaryLight, padding: 10, borderRadius: 14, marginRight: 14 }}>
+              <ShieldCheck size={20} color={theme.primary} />
             </View>
-            <View className="flex-1">
-              <Text className="text-white font-bold text-sm">{t('offlineOui')}</Text>
-              <Text className="text-slate-400 text-xs mt-0.5 leading-relaxed">
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: theme.text, fontWeight: '700', fontSize: 15 }}>{t('offlineOui')}</Text>
+              <Text style={{ color: theme.textSecondary, fontSize: 13, marginTop: 4, lineHeight: 18 }}>
                 {t('offlineOuiDesc')}
               </Text>
             </View>
