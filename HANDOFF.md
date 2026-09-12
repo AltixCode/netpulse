@@ -8,7 +8,7 @@
 
 ### Completed Tasks
 * [x] Initialized Expo SDK 57+ repository with TypeScript template (`strict: true`)
-* [x] Configured bundle IDs (`com.hushtunnel.netpulse`), scheme, and permissions in `app.json`
+* [x] Configured bundle IDs (`com.altixcode.netpulse`), scheme, and permissions in `app.json`
 * [x] Configured NativeWind v4, Tailwind CSS, and Metro config
 * [x] Implemented on-device network latency, jitter standard deviation, and packet loss engine (`src/engine/pingEngine.ts`)
 * [x] Implemented offline subnet ARP sweeper and local IEEE OUI vendor dictionary lookup (`src/engine/subnetScanner.ts`)

@@ -15,14 +15,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.hushtunnel.netpulse",
+      "bundleIdentifier": "com.altixcode.netpulse",
       "buildNumber": "1",
       "infoPlist": {
         "NSLocalNetworkUsageDescription": "NetPulse needs local network access to scan subnet devices and measure latency."
       }
     },
     "android": {
-      "package": "com.hushtunnel.netpulse",
+      "package": "com.altixcode.netpulse",
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#020617",
