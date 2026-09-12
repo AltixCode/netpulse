@@ -25,6 +25,7 @@ import { useNetworkStore } from '../src/store/useNetworkStore';
 import { scanSubnetDevices } from '../src/engine/subnetScanner';
 import { DeviceItemCard } from '../src/components/DeviceItemCard';
 import { PaywallModal } from '../src/components/PaywallModal';
+import { t } from '../src/i18n';
 
 export default function DevicesScreen() {
   const router = useRouter();
@@ -82,7 +83,7 @@ export default function DevicesScreen() {
               <Wifi size={18} color="#34D399" />
             </View>
             <View>
-              <Text className="text-white font-bold text-base">Local Subnet Range</Text>
+              <Text className="text-white font-bold text-base">{t('localSubnetRange')}</Text>
               <Text className="text-slate-400 font-mono text-xs">
                 {localIp.split('.').slice(0, 3).join('.')}.0/24
               </Text>
@@ -90,7 +91,7 @@ export default function DevicesScreen() {
           </View>
 
           <View className="items-end">
-            <Text className="text-slate-400 text-xs font-semibold">Gateway</Text>
+            <Text className="text-slate-400 text-xs font-semibold">{t('gateway')}</Text>
             <Text className="text-emerald-400 font-mono font-bold text-xs">{gatewayIp}</Text>
           </View>
         </View>
@@ -106,14 +107,17 @@ export default function DevicesScreen() {
             <View className="flex-row items-center">
               <ActivityIndicator size="small" color="#FFFFFF" />
               <Text className="text-white font-bold text-sm ml-2">
-                Sweeping Subnet ({scanProgress ? `${scanProgress.current}/${scanProgress.total}` : '...'})
+                {t('sweepingSubnet', {
+                  current: scanProgress ? scanProgress.current : 0,
+                  total: scanProgress ? scanProgress.total : 6,
+                })}
               </Text>
             </View>
           ) : (
             <>
               <RefreshCw size={16} color="#FFFFFF" />
               <Text className="text-white font-bold text-base ml-2">
-                {devices.length > 0 ? 'Rescan Subnet Devices' : 'Start Subnet ARP Sweep'}
+                {devices.length > 0 ? t('rescanDevices') : t('startArpSweep')}
               </Text>
             </>
           )}
@@ -130,14 +134,14 @@ export default function DevicesScreen() {
           <View className="flex-row items-center flex-1 mr-2">
             <Crown size={18} color="#F59E0B" />
             <View className="ml-2.5 flex-1">
-              <Text className="text-white font-bold text-xs">Port Scanner Locked</Text>
+              <Text className="text-white font-bold text-xs">{t('portScannerLocked')}</Text>
               <Text className="text-slate-400 text-[11px] mt-0.5">
-                Audit open TCP ports (22, 80, 443, 8080) on discovered hosts with Pro.
+                {t('portScannerDesc')}
               </Text>
             </View>
           </View>
           <View className="bg-amber-500/20 px-2.5 py-1 rounded-full">
-            <Text className="text-amber-400 font-bold text-xs">Unlock</Text>
+            <Text className="text-amber-400 font-bold text-xs">{t('unlock')}</Text>
           </View>
         </TouchableOpacity>
       )}
@@ -149,7 +153,7 @@ export default function DevicesScreen() {
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Filter by IP, MAC or vendor..."
+            placeholder={t('searchPlaceholder')}
             placeholderTextColor="#64748B"
             className="flex-1 text-white text-sm ml-2.5 py-1"
           />
@@ -163,19 +167,18 @@ export default function DevicesScreen() {
             <View className="bg-slate-800 p-4 rounded-3xl mb-4">
               <Router size={36} color="#60A5FA" />
             </View>
-            <Text className="text-white font-bold text-lg text-center">No Devices Scanned Yet</Text>
+            <Text className="text-white font-bold text-lg text-center">{t('noDevicesScanned')}</Text>
             <Text className="text-slate-400 text-xs text-center mt-2 leading-relaxed max-w-xs">
-              Tap the button above to broadcast ARP requests and discover all smart TVs, phones,
-              laptops, and IoT hardware on your network.
+              {t('noDevicesDesc')}
             </Text>
           </View>
         ) : (
           <>
             <View className="flex-row items-center justify-between mb-3 px-1">
               <Text className="text-slate-400 text-xs font-bold uppercase tracking-wider">
-                Discovered Hosts ({filteredDevices.length})
+                {t('discoveredHosts', { count: filteredDevices.length })}
               </Text>
-              <Text className="text-slate-500 text-xs">IEEE OUI Resolved</Text>
+              <Text className="text-slate-500 text-xs">{t('ouiResolved')}</Text>
             </View>
 
             {filteredDevices.map((device) => (

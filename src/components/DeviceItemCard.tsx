@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Router, Smartphone, Laptop, Cpu, Wifi } from 'lucide-react-native';
 import { SubnetDevice } from '../engine/subnetScanner';
+import { t } from '../i18n';
 
 interface DeviceItemCardProps {
   device: SubnetDevice;
@@ -29,7 +30,7 @@ export const DeviceItemCard: React.FC<DeviceItemCardProps> = ({ device }) => {
             <Text className="text-white font-mono font-bold text-sm mr-2">{device.ip}</Text>
             {device.isGateway && (
               <View className="bg-blue-500/20 px-1.5 py-0.5 rounded">
-                <Text className="text-blue-400 text-[10px] font-bold uppercase">Router</Text>
+                <Text className="text-blue-400 text-[10px] font-bold uppercase">{t('router')}</Text>
               </View>
             )}
           </View>

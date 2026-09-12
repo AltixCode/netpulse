@@ -5,6 +5,7 @@ import { TouchableOpacity, Text } from 'react-native';
 import { Crown } from 'lucide-react-native';
 import { initPurchases, checkIsPro } from '../src/services/purchases';
 import { useNetworkStore } from '../src/store/useNetworkStore';
+import { t } from '../src/i18n';
 import '../global.css';
 
 export default function RootLayout() {
@@ -32,7 +33,7 @@ export default function RootLayout() {
                 className="bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-full flex-row items-center"
               >
                 <Crown size={14} color="#F59E0B" />
-                <Text className="text-amber-400 text-xs font-bold ml-1.5">PRO</Text>
+                <Text className="text-amber-400 text-xs font-bold ml-1.5">{t('proBadge')}</Text>
               </TouchableOpacity>
             ) : null,
         }}
@@ -40,28 +41,28 @@ export default function RootLayout() {
         <Stack.Screen
           name="index"
           options={{
-            title: 'NetPulse',
+            title: t('appName'),
             headerTitleAlign: 'left',
           }}
         />
         <Stack.Screen
           name="devices"
           options={{
-            title: 'Subnet Devices',
-            headerBackTitle: 'Back',
+            title: t('subnetDevicesTitle'),
+            headerBackTitle: t('back'),
           }}
         />
         <Stack.Screen
           name="report"
           options={{
-            title: 'ISP Diagnostic Audit',
-            headerBackTitle: 'Back',
+            title: t('ispAuditTitle'),
+            headerBackTitle: t('back'),
           }}
         />
         <Stack.Screen
           name="paywall"
           options={{
-            title: 'NetPulse Pro',
+            title: t('paywallTitle'),
             presentation: 'modal',
           }}
         />

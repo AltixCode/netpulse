@@ -17,6 +17,7 @@ import {
 import { useNetworkStore } from '../src/store/useNetworkStore';
 import { runNetworkBenchmark } from '../src/engine/pingEngine';
 import { LatencyGauge } from '../src/components/LatencyGauge';
+import { t } from '../src/i18n';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -50,15 +51,14 @@ export default function HomeScreen() {
           <View className="inline-flex self-start bg-blue-500/10 border border-blue-500/30 px-3 py-1 rounded-full mb-3 flex-row items-center">
             <Sparkles size={12} color="#60A5FA" />
             <Text className="text-blue-400 text-xs font-semibold ml-1.5">
-              100% Ad-Free Network Suite
+              {t('heroBadge')}
             </Text>
           </View>
           <Text className="text-3xl font-extrabold text-white tracking-tight">
-            Network Ping & Audit
+            {t('heroTitle')}
           </Text>
           <Text className="text-slate-400 text-sm mt-1.5 leading-relaxed">
-            Audit latency, measure jitter variance, and scan subnet devices without commercial ads
-            or cloud tracking.
+            {t('heroSubtitle')}
           </Text>
         </View>
 
@@ -82,7 +82,7 @@ export default function HomeScreen() {
           ) : (
             <>
               <RefreshCw size={16} color="#FFFFFF" />
-              <Text className="text-white font-bold text-base ml-2">Benchmark Latency Now</Text>
+              <Text className="text-white font-bold text-base ml-2">{t('benchmarkNow')}</Text>
             </>
           )}
         </TouchableOpacity>
@@ -91,7 +91,7 @@ export default function HomeScreen() {
         <View className="bg-slate-900 border border-slate-800 rounded-3xl p-5 mb-5">
           <View className="flex-row items-center mb-3">
             <Globe size={18} color="#60A5FA" />
-            <Text className="text-white font-bold text-sm ml-2">DNS Backbone Latency</Text>
+            <Text className="text-white font-bold text-sm ml-2">{t('dnsBackbone')}</Text>
           </View>
 
           <View className="flex-row space-x-3">
@@ -100,7 +100,7 @@ export default function HomeScreen() {
               <Text className="text-white font-mono font-bold text-lg mt-1">
                 {benchmark.cloudflarePing} ms
               </Text>
-              <Text className="text-emerald-400 text-[10px] mt-0.5">Primary Resolver</Text>
+              <Text className="text-emerald-400 text-[10px] mt-0.5">{t('primaryResolver')}</Text>
             </View>
 
             <View className="flex-1 bg-slate-950 border border-slate-800 p-3.5 rounded-2xl ml-2">
@@ -108,7 +108,7 @@ export default function HomeScreen() {
               <Text className="text-white font-mono font-bold text-lg mt-1">
                 {benchmark.googlePing} ms
               </Text>
-              <Text className="text-slate-500 text-[10px] mt-0.5">Secondary Fallback</Text>
+              <Text className="text-slate-500 text-[10px] mt-0.5">{t('secondaryFallback')}</Text>
             </View>
           </View>
         </View>
@@ -126,9 +126,9 @@ export default function HomeScreen() {
                 <Router size={22} color="#34D399" />
               </View>
               <View className="flex-1">
-                <Text className="text-white font-bold text-base">Subnet Device Inventory</Text>
+                <Text className="text-white font-bold text-base">{t('subnetCardTitle')}</Text>
                 <Text className="text-slate-400 text-xs mt-0.5">
-                  Scan local /24 subnet & identify vendor MAC prefixes
+                  {t('subnetCardDesc')}
                 </Text>
               </View>
             </View>
@@ -146,9 +146,9 @@ export default function HomeScreen() {
                 <FileSpreadsheet size={22} color="#FBBF24" />
               </View>
               <View className="flex-1">
-                <Text className="text-white font-bold text-base">ISP Diagnostic Report</Text>
+                <Text className="text-white font-bold text-base">{t('ispCardTitle')}</Text>
                 <Text className="text-slate-400 text-xs mt-0.5">
-                  Export timestamped CSV logs and proof of connection drops
+                  {t('ispCardDesc')}
                 </Text>
               </View>
             </View>
@@ -159,7 +159,7 @@ export default function HomeScreen() {
         {/* Architectural Guarantees */}
         <View className="space-y-3">
           <Text className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
-            Audit Guarantees
+            {t('auditGuarantees')}
           </Text>
 
           <View className="bg-slate-900/60 border border-slate-800/80 p-4 rounded-2xl flex-row items-start">
@@ -167,10 +167,9 @@ export default function HomeScreen() {
               <ShieldCheck size={18} color="#60A5FA" />
             </View>
             <View className="flex-1">
-              <Text className="text-white font-bold text-sm">Offline IEEE OUI Database</Text>
+              <Text className="text-white font-bold text-sm">{t('offlineOui')}</Text>
               <Text className="text-slate-400 text-xs mt-0.5 leading-relaxed">
-                Manufacturer MAC lookups resolve from a pre-bundled local database. Zero telemetry
-                or device signatures sent to third parties.
+                {t('offlineOuiDesc')}
               </Text>
             </View>
           </View>

@@ -31,6 +31,7 @@ import {
   saveReportFile,
 } from '../src/engine/reportEngine';
 import { PaywallModal } from '../src/components/PaywallModal';
+import { t } from '../src/i18n';
 
 export default function ReportScreen() {
   const router = useRouter();
@@ -43,8 +44,8 @@ export default function ReportScreen() {
   const getStabilityRating = () => {
     if (benchmark.packetLoss > 0) {
       return {
-        label: 'Grade C: Packet Loss Detected',
-        desc: 'Upstream router dropping packets. Submits strong grounds for an ISP service ticket.',
+        label: t('gradeC'),
+        desc: t('gradeCDesc'),
         color: '#EF4444',
         bg: 'bg-red-500/10 border-red-500/30',
         icon: <AlertTriangle size={18} color="#EF4444" />,
@@ -52,16 +53,16 @@ export default function ReportScreen() {
     }
     if (benchmark.jitter > 15) {
       return {
-        label: 'Grade B: Bufferbloat Jitter',
-        desc: 'Elevated latency jitter observed. Causes micro-stutters in gaming and VoIP streams.',
+        label: t('gradeB'),
+        desc: t('gradeBDesc'),
         color: '#F59E0B',
         bg: 'bg-amber-500/10 border-amber-500/30',
         icon: <AlertTriangle size={18} color="#F59E0B" />,
       };
     }
     return {
-      label: 'Grade A+: Optimal Connection',
-      desc: 'Sub-millisecond variance with 0% packet loss. Excellent performance for gaming and streaming.',
+      label: t('gradeA'),
+      desc: t('gradeADesc'),
       color: '#10B981',
       bg: 'bg-emerald-500/10 border-emerald-500/30',
       icon: <CheckCircle2 size={18} color="#10B981" />,
@@ -93,7 +94,7 @@ export default function ReportScreen() {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(filePath, {
           mimeType: 'text/csv',
-          dialogTitle: 'Export ISP Diagnostic CSV',
+          dialogTitle: t('exportCsvDialog'),
           UTI: 'public.comma-separated-values-text',
         });
       }
@@ -128,7 +129,7 @@ export default function ReportScreen() {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(filePath, {
           mimeType: 'text/plain',
-          dialogTitle: 'Export ISP Diagnostic Summary',
+          dialogTitle: t('exportSummaryDialog'),
           UTI: 'public.plain-text',
         });
       }
@@ -151,12 +152,12 @@ export default function ReportScreen() {
               <Text className="text-slate-400 font-mono text-xs ml-1.5">{timestamp}</Text>
             </View>
             <View className="bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
-              <Text className="text-blue-400 font-mono text-[10px] font-bold">10 SAMPLES</Text>
+              <Text className="text-blue-400 font-mono text-[10px] font-bold">{t('samplesCount')}</Text>
             </View>
           </View>
-          <Text className="text-2xl font-extrabold text-white">Diagnostic Audit</Text>
+          <Text className="text-2xl font-extrabold text-white">{t('diagnosticAudit')}</Text>
           <Text className="text-slate-400 text-xs mt-1">
-            Certified timestamped metrics proving latency, packet drops, and bufferbloat to your ISP.
+            {t('diagnosticDesc')}
           </Text>
         </View>
 
@@ -172,7 +173,7 @@ export default function ReportScreen() {
         {/* 4-Card Metric Grid */}
         <View className="flex-row space-x-3 mb-3">
           <View className="flex-1 bg-slate-900 border border-slate-800 p-4 rounded-2xl mr-1.5">
-            <Text className="text-slate-400 text-xs font-semibold">Average Ping</Text>
+            <Text className="text-slate-400 text-xs font-semibold">{t('avgPing')}</Text>
             <Text className="text-white font-mono font-bold text-2xl mt-1">
               {benchmark.averagePing}
               <Text className="text-xs text-slate-400"> ms</Text>
@@ -180,7 +181,7 @@ export default function ReportScreen() {
           </View>
 
           <View className="flex-1 bg-slate-900 border border-slate-800 p-4 rounded-2xl ml-1.5">
-            <Text className="text-slate-400 text-xs font-semibold">Jitter Variance</Text>
+            <Text className="text-slate-400 text-xs font-semibold">{t('jitterVariance')}</Text>
             <Text className="text-amber-400 font-mono font-bold text-2xl mt-1">
               ±{benchmark.jitter}
               <Text className="text-xs text-slate-400"> ms</Text>
@@ -190,7 +191,7 @@ export default function ReportScreen() {
 
         <View className="flex-row space-x-3 mb-5">
           <View className="flex-1 bg-slate-900 border border-slate-800 p-4 rounded-2xl mr-1.5">
-            <Text className="text-slate-400 text-xs font-semibold">Packet Loss</Text>
+            <Text className="text-slate-400 text-xs font-semibold">{t('packetLoss')}</Text>
             <Text
               className={`font-mono font-bold text-2xl mt-1 ${
                 benchmark.packetLoss > 0 ? 'text-red-400' : 'text-emerald-400'
@@ -201,7 +202,7 @@ export default function ReportScreen() {
           </View>
 
           <View className="flex-1 bg-slate-900 border border-slate-800 p-4 rounded-2xl ml-1.5">
-            <Text className="text-slate-400 text-xs font-semibold">Cloudflare DNS</Text>
+            <Text className="text-slate-400 text-xs font-semibold">{t('cloudflareDns')}</Text>
             <Text className="text-blue-400 font-mono font-bold text-2xl mt-1">
               {benchmark.cloudflarePing}
               <Text className="text-xs text-slate-400"> ms</Text>
@@ -219,14 +220,14 @@ export default function ReportScreen() {
             <View className="flex-row items-center flex-1 mr-2">
               <Crown size={20} color="#F59E0B" />
               <View className="ml-2.5 flex-1">
-                <Text className="text-white font-bold text-sm">Export Locked to NetPulse Pro</Text>
+                <Text className="text-white font-bold text-sm">{t('exportLocked')}</Text>
                 <Text className="text-slate-400 text-xs mt-0.5">
-                  Unlock lifetime export rights for CSV logs and ISP diagnostic summaries.
+                  {t('exportLockedDesc')}
                 </Text>
               </View>
             </View>
             <View className="bg-amber-500/20 px-3 py-1.5 rounded-full">
-              <Text className="text-amber-400 font-bold text-xs">Unlock</Text>
+              <Text className="text-amber-400 font-bold text-xs">{t('unlock')}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -234,7 +235,7 @@ export default function ReportScreen() {
         {/* Export Actions */}
         <View className="space-y-3 mb-5">
           <Text className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1 px-1">
-            Export Audit Evidence
+            {t('exportEvidence')}
           </Text>
 
           {/* Export CSV Button */}
@@ -247,9 +248,9 @@ export default function ReportScreen() {
             <View className="flex-row items-center">
               <FileSpreadsheet size={20} color="#FFFFFF" />
               <View className="ml-3">
-                <Text className="text-white font-bold text-base">Export Detailed CSV Log</Text>
+                <Text className="text-white font-bold text-base">{t('exportCsv')}</Text>
                 <Text className="text-blue-200 text-xs">
-                  Raw latency, timestamps & jitter matrix for Excel / Sheets
+                  {t('exportCsvDesc')}
                 </Text>
               </View>
             </View>
@@ -272,9 +273,9 @@ export default function ReportScreen() {
             <View className="flex-row items-center">
               <FileText size={20} color="#60A5FA" />
               <View className="ml-3">
-                <Text className="text-white font-bold text-base">Export ISP Ticket Summary</Text>
+                <Text className="text-white font-bold text-base">{t('exportSummary')}</Text>
                 <Text className="text-slate-400 text-xs">
-                  Formatted text audit ready to paste directly into support tickets
+                  {t('exportSummaryDesc')}
                 </Text>
               </View>
             </View>
@@ -291,8 +292,8 @@ export default function ReportScreen() {
         {/* Audit Samples Table Preview */}
         <View className="bg-slate-900 border border-slate-800 rounded-3xl p-5">
           <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-white font-bold text-sm">Sample Ping History</Text>
-            <Text className="text-slate-500 font-mono text-xs">Target: 1.1.1.1</Text>
+            <Text className="text-white font-bold text-sm">{t('samplePingHistory')}</Text>
+            <Text className="text-slate-500 font-mono text-xs">{t('targetDns')}</Text>
           </View>
 
           <View className="space-y-2">
@@ -301,7 +302,9 @@ export default function ReportScreen() {
                 key={i}
                 className="flex-row items-center justify-between py-1.5 border-b border-slate-800/60"
               >
-                <Text className="text-slate-400 font-mono text-xs">Ping #{i + 1}</Text>
+                <Text className="text-slate-400 font-mono text-xs">
+                  {t('pingNum', { number: i + 1 })}
+                </Text>
                 <Text className="text-white font-mono font-bold text-xs">{ping} ms</Text>
               </View>
             ))}

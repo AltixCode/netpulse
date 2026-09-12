@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Activity, Zap, ShieldCheck } from 'lucide-react-native';
+import { t } from '../i18n';
 
 interface LatencyGaugeProps {
   currentPing: number;
@@ -31,11 +32,11 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
           <View className="bg-blue-500/20 p-2 rounded-xl mr-2">
             <Activity size={18} color="#60A5FA" />
           </View>
-          <Text className="text-white font-bold text-base">Connection Latency</Text>
+          <Text className="text-white font-bold text-base">{t('connectionLatency')}</Text>
         </View>
         <View className="flex-row items-center bg-emerald-500/20 px-2.5 py-1 rounded-full border border-emerald-500/30">
           <View className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5" />
-          <Text className="text-emerald-400 text-xs font-semibold">Active</Text>
+          <Text className="text-emerald-400 text-xs font-semibold">{t('active')}</Text>
         </View>
       </View>
 
@@ -50,7 +51,7 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
           </Text>
           <Text className="text-slate-400 text-xl font-bold ml-1.5 font-mono">ms</Text>
         </View>
-        <Text className="text-slate-400 text-xs mt-1">Round-Trip Time (RTT)</Text>
+        <Text className="text-slate-400 text-xs mt-1">{t('rtt')}</Text>
       </View>
 
       {/* Real-time Sparkline Bars */}
@@ -70,14 +71,14 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
       {/* Metrics Row: Average & Jitter */}
       <View className="flex-row justify-between pt-4 border-t border-slate-800">
         <View className="items-center flex-1">
-          <Text className="text-slate-500 text-[10px] uppercase font-bold">Average Ping</Text>
+          <Text className="text-slate-500 text-[10px] uppercase font-bold">{t('avgPing')}</Text>
           <Text className="text-white text-base font-mono font-bold mt-0.5">{averagePing} ms</Text>
         </View>
 
         <View className="w-px h-8 bg-slate-800" />
 
         <View className="items-center flex-1">
-          <Text className="text-slate-500 text-[10px] uppercase font-bold">Jitter Variance</Text>
+          <Text className="text-slate-500 text-[10px] uppercase font-bold">{t('jitterVariance')}</Text>
           <Text className="text-cyan-400 text-base font-mono font-bold mt-0.5">{jitter} ms</Text>
         </View>
       </View>
