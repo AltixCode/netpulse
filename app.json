@@ -8,17 +8,24 @@
     "scheme": "netpulse",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#020617"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.hushtunnel.netpulse",
+      "buildNumber": "1",
       "infoPlist": {
         "NSLocalNetworkUsageDescription": "NetPulse needs local network access to scan subnet devices and measure latency."
       }
     },
     "android": {
       "package": "com.hushtunnel.netpulse",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#0F172A",
+        "backgroundColor": "#020617",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
