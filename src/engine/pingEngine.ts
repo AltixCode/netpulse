@@ -71,6 +71,15 @@ const ENDPOINTS = [
 const PROBES_PER_ENDPOINT = 3;
 
 /**
+ * The first request to an endpoint pays DNS resolution and the TLS handshake,
+ * which is connection setup rather than round-trip latency. Including it made a
+ * stable link report tens of milliseconds of jitter, because the series looked
+ * like [120, 15, 18] rather than [15, 18, 16]. The warm-up still counts towards
+ * packet loss — a connection that cannot be opened is a genuine failure.
+ */
+const WARM_UP_PROBES = 1;
+
+/**
  * Runs a benchmark round against two public resolvers.
  *
  * Packet loss is the share of probes that genuinely did not answer. It used to
@@ -86,13 +95,12 @@ export const runNetworkBenchmark = async (
 
   for (const endpoint of ENDPOINTS) {
     perEndpoint[endpoint.key] = [];
-    for (let i = 0; i < PROBES_PER_ENDPOINT; i++) {
+    for (let i = 0; i < WARM_UP_PROBES + PROBES_PER_ENDPOINT; i++) {
       sent += 1;
       const latency = await measureEndpointLatency(endpoint.url);
-      if (latency !== null) {
-        received += 1;
-        perEndpoint[endpoint.key].push(latency);
-      }
+      if (latency === null) continue;
+      received += 1;
+      if (i >= WARM_UP_PROBES) perEndpoint[endpoint.key].push(latency);
     }
   }
 

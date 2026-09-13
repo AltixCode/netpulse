@@ -1,0 +1,24 @@
+appId: com.altixcode.netpulse
+name: Measure and discover
+---
+# A real Bonjour service named "NetPulse Verification Target" is published on
+# this machine before the run. Discovery either finds that exact service or the
+# run fails — the build this replaces returned six invented hosts regardless of
+# what was on the network.
+- launchApp:
+    clearState: false
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Cancel"
+# Before any test there must be no measurement on screen; the store used to be
+# seeded with a healthy-looking benchmark.
+- assertVisible: ".*Not tested.*"
+- takeScreenshot: artifacts/01-unmeasured
+
+- tapOn: ".*Benchmark Latency Now.*"
+- extendedWaitUntil:
+    visible: ".*Active.*"
+    timeout: 90000
+- takeScreenshot: artifacts/02-measured
