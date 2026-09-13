@@ -53,7 +53,7 @@
 
 ## Product Quality Audit — 2026-09-13T11:49:37+0300
 
-* Implementation commits: `1425604` (purchase/UI/CI hardening) and `c6c86be` (iOS 27 scene lifecycle) on `main`.
+* Implementation commits: `396fd5d` (purchase/UI/CI hardening) and `3fbf5d5` (iOS 27 scene lifecycle) on `main`, rebased over runner/store pipeline commit `b23a9c8`.
 * Purchase integrity: removed embedded RevenueCat key fallbacks and eliminated the development behavior that granted `pro` when RevenueCat was not configured. Unconfigured purchase and restore attempts now fail closed.
 * UI and behavior: benchmark, subnet-scan, and report-sharing failures now remain visible as accessible alerts; sharing-unavailable is handled as an error; primary, navigation, paywall, restore, and search controls gained accessibility semantics; busy controls expose disabled/busy state and visible opacity; the paywall now respects the bottom safe area.
 * Theme hygiene: moved foreground, overlay, shadow, feature, and status tint values into semantic theme tokens; audited app/component views contain no raw hex or `rgba(...)` values.
