@@ -18,7 +18,24 @@
       "bundleIdentifier": "com.altixcode.netpulse",
       "buildNumber": "1",
       "infoPlist": {
-        "NSLocalNetworkUsageDescription": "NetPulse needs local network access to scan subnet devices and measure latency."
+        "NSLocalNetworkUsageDescription": "NetPulse needs local network access to scan subnet devices and measure latency.",
+        "CFBundleLocalizations": [
+          "en",
+          "es",
+          "fr",
+          "de",
+          "ru",
+          "zh",
+          "ja",
+          "pt",
+          "ko",
+          "it",
+          "tr",
+          "ar",
+          "fa",
+          "el"
+        ],
+        "CFBundleDevelopmentRegion": "en"
       }
     },
     "android": {

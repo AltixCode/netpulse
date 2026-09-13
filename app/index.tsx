@@ -7,7 +7,6 @@ import {
   Sparkles,
   Router,
   FileSpreadsheet,
-  ArrowRight,
   RefreshCw,
   Globe,
   ShieldCheck,
@@ -17,6 +16,7 @@ import { runNetworkBenchmark } from '../src/engine/pingEngine';
 import { LatencyGauge } from '../src/components/LatencyGauge';
 import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
+import { ForwardArrow } from '../src/components/DirectionalIcons';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -200,7 +200,7 @@ export default function HomeScreen() {
                 </Text>
               </View>
             </View>
-            <ArrowRight size={18} color={theme.textMuted} />
+            <ForwardArrow size={18} color={theme.textMuted} />
           </TouchableOpacity>
 
           {/* ISP Audit Report Card */}
@@ -230,7 +230,7 @@ export default function HomeScreen() {
                 </Text>
               </View>
             </View>
-            <ArrowRight size={18} color={theme.textMuted} />
+            <ForwardArrow size={18} color={theme.textMuted} />
           </TouchableOpacity>
         </View>
 
