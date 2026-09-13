@@ -1,0 +1,26 @@
+appId: com.altixcode.netpulse
+name: Store screenshots
+---
+# Runs a real benchmark so the latency, jitter and packet-loss figures shown are
+# measured, not posed. The numbers differ per run, which is the point: they are
+# what the app actually reported.
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: 01-hero
+
+- tapOn: ".*Benchmark Latency Now.*"
+- extendedWaitUntil:
+    visible: ".*Active.*"
+    timeout: 120000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: 02-measured
+
+- scrollUntilVisible:
+    element:
+      text: ".*DNS Backbone.*"
+    direction: DOWN
+    timeout: 20000
+- takeScreenshot: 03-dns

@@ -1,16 +1,16 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest12585635008731627627.xml:2:13-83
-INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest12585635008731627627.xml:2:13-83
+ADDED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15786610536052931497.xml:2:13-83
+INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15786610536052931497.xml:2:13-83
 	package
-		INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest12585635008731627627.xml
+		INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15786610536052931497.xml
 	xmlns:android
-		ADDED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest12585635008731627627.xml:2:23-81
+		ADDED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15786610536052931497.xml:2:23-81
 uses-sdk
-INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest12585635008731627627.xml reason: use-sdk injection requested
-INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest12585635008731627627.xml
-INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest12585635008731627627.xml
+INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15786610536052931497.xml reason: use-sdk injection requested
+INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15786610536052931497.xml
+INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15786610536052931497.xml
 	android:targetSdkVersion
-		INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest12585635008731627627.xml
+		INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15786610536052931497.xml
 	android:minSdkVersion
-		INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest12585635008731627627.xml
+		INJECTED from /Volumes/ExtremePro/Dev/netpulse/modules/net-discovery/android/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest15786610536052931497.xml
