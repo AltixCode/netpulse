@@ -72,9 +72,9 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
             borderRadius: 9999,
           }}
         >
-          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: theme.success, marginRight: 6 }} />
-          <Text style={{ color: theme.success, fontSize: 12, fontWeight: '600' }}>
-            {t('active')}
+          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: currentPing === null ? theme.textMuted : theme.success, marginRight: 6 }} />
+          <Text style={{ color: currentPing === null ? theme.textMuted : theme.success, fontSize: 12, fontWeight: '600' }}>
+            {currentPing === null ? t('notTested') : t('active')}
           </Text>
         </View>
       </View>
@@ -121,7 +121,14 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
           paddingHorizontal: 4,
         }}
       >
-        {history.map((val, idx) => {
+        {history.length < 2 ? (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ color: theme.textMuted, fontSize: 11 }}>
+              {t('historyPending')}
+            </Text>
+          </View>
+        ) : null}
+        {history.length < 2 ? null : history.map((val, idx) => {
           const heightPercent = Math.max(12, Math.min(100, (val / maxPing) * 100));
           return (
             <View

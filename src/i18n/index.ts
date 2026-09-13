@@ -32,6 +32,8 @@ export const SUPPORTED_LANGUAGES: SupportedLanguage[] = [
 export const translations = {
   "en": {
     "proBadge": "PRO",
+    "historyPending": "Run more tests to see a trend",
+    "notTested": "Not tested",
     "notMeasured": "—",
     "unknownNetwork": "Network not identified",
     "noMeasurementYet": "Run a test to measure this connection",
@@ -125,6 +127,8 @@ export const translations = {
   },
   "es": {
     "proBadge": "PRO",
+    "historyPending": "Ejecuta más pruebas para ver la tendencia",
+    "notTested": "Sin probar",
     "notMeasured": "—",
     "unknownNetwork": "Red no identificada",
     "noMeasurementYet": "Ejecuta una prueba para medir esta conexión",
@@ -218,6 +222,8 @@ export const translations = {
   },
   "fr": {
     "proBadge": "PRO",
+    "historyPending": "Lancez d'autres tests pour voir une tendance",
+    "notTested": "Non testé",
     "notMeasured": "—",
     "unknownNetwork": "Réseau non identifié",
     "noMeasurementYet": "Lancez un test pour mesurer cette connexion",
@@ -311,6 +317,8 @@ export const translations = {
   },
   "de": {
     "proBadge": "PRO",
+    "historyPending": "Weitere Tests für einen Verlauf ausführen",
+    "notTested": "Nicht getestet",
     "notMeasured": "—",
     "unknownNetwork": "Netzwerk nicht ermittelt",
     "noMeasurementYet": "Starte einen Test, um diese Verbindung zu messen",
@@ -404,6 +412,8 @@ export const translations = {
   },
   "ru": {
     "proBadge": "PRO",
+    "historyPending": "Проведите ещё тесты, чтобы увидеть динамику",
+    "notTested": "Не проверено",
     "notMeasured": "—",
     "unknownNetwork": "Сеть не определена",
     "noMeasurementYet": "Запустите тест, чтобы измерить это подключение",
@@ -497,6 +507,8 @@ export const translations = {
   },
   "zh": {
     "proBadge": "专业版",
+    "historyPending": "多测几次即可查看趋势",
+    "notTested": "未测试",
     "notMeasured": "—",
     "unknownNetwork": "未识别网络",
     "noMeasurementYet": "运行测试以测量此连接",
@@ -590,6 +602,8 @@ export const translations = {
   },
   "ja": {
     "proBadge": "PRO",
+    "historyPending": "複数回テストすると推移が表示されます",
+    "notTested": "未計測",
     "notMeasured": "—",
     "unknownNetwork": "ネットワークを特定できません",
     "noMeasurementYet": "テストを実行してこの接続を計測します",
@@ -683,6 +697,8 @@ export const translations = {
   },
   "pt": {
     "proBadge": "PRO",
+    "historyPending": "Execute mais testes para ver a tendência",
+    "notTested": "Não testado",
     "notMeasured": "—",
     "unknownNetwork": "Rede não identificada",
     "noMeasurementYet": "Execute um teste para medir esta conexão",
@@ -776,6 +792,8 @@ export const translations = {
   },
   "ko": {
     "proBadge": "PRO",
+    "historyPending": "여러 번 측정하면 추이를 볼 수 있습니다",
+    "notTested": "미측정",
     "notMeasured": "—",
     "unknownNetwork": "네트워크를 확인할 수 없음",
     "noMeasurementYet": "테스트를 실행해 이 연결을 측정하세요",
@@ -869,6 +887,8 @@ export const translations = {
   },
   "it": {
     "proBadge": "PRO",
+    "historyPending": "Esegui altri test per vedere l'andamento",
+    "notTested": "Non testato",
     "notMeasured": "—",
     "unknownNetwork": "Rete non identificata",
     "noMeasurementYet": "Esegui un test per misurare questa connessione",
@@ -962,6 +982,8 @@ export const translations = {
   },
   "tr": {
     "proBadge": "PRO",
+    "historyPending": "Eğilimi görmek için daha fazla test çalıştırın",
+    "notTested": "Test edilmedi",
     "notMeasured": "—",
     "unknownNetwork": "Ağ belirlenemedi",
     "noMeasurementYet": "Bu bağlantıyı ölçmek için bir test çalıştırın",
@@ -1055,6 +1077,8 @@ export const translations = {
   },
   "ar": {
     "proBadge": "احترافي",
+    "historyPending": "شغّل اختبارات أخرى لعرض الاتجاه",
+    "notTested": "لم يُختبر",
     "notMeasured": "—",
     "unknownNetwork": "تعذّر تحديد الشبكة",
     "noMeasurementYet": "شغّل اختبارًا لقياس هذا الاتصال",

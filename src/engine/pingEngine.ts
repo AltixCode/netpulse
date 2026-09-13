@@ -107,6 +107,18 @@ export const runNetworkBenchmark = async (
   const answered = [...perEndpoint.cloudflare, ...perEndpoint.google];
   const currentPing = mean(answered);
 
+  // Jitter is the variation between consecutive probes to the *same* endpoint.
+  // Measuring it across a concatenation of two hosts reports the difference
+  // between those hosts instead: with Cloudflare at 35 ms and Google at 92 ms
+  // the mixed series gave 66.8 ms jitter on a stable connection.
+  const perEndpointJitter = ENDPOINTS
+    .map((endpoint) => calculateJitter(perEndpoint[endpoint.key]))
+    .filter((value): value is number => value !== null);
+  const jitter =
+    perEndpointJitter.length === 0
+      ? null
+      : Math.round((perEndpointJitter.reduce((a, b) => a + b, 0) / perEndpointJitter.length) * 10) / 10;
+
   // Only append a real measurement; a gap in history is better than a
   // fabricated point that flatters the graph.
   const history =
@@ -117,7 +129,7 @@ export const runNetworkBenchmark = async (
   return {
     currentPing,
     averagePing: mean(history),
-    jitter: calculateJitter(answered),
+    jitter,
     packetLoss: sent === 0 ? 0 : Math.round(((sent - received) / sent) * 100),
     cloudflarePing,
     googlePing,

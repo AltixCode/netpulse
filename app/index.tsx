@@ -147,7 +147,7 @@ export default function HomeScreen() {
             >
               <Text style={{ color: theme.textSecondary, fontSize: 12, fontWeight: '600' }}>Cloudflare 1.1.1.1</Text>
               <Text style={{ color: theme.text, fontSize: 20, fontWeight: '800', marginVertical: 4 }}>
-                {benchmark.cloudflarePing} ms
+                {benchmark.cloudflarePing ?? t("notMeasured")} ms
               </Text>
               <Text style={{ color: theme.success, fontSize: 11, fontWeight: '600' }}>{t('primaryResolver')}</Text>
             </View>
@@ -164,7 +164,7 @@ export default function HomeScreen() {
             >
               <Text style={{ color: theme.textSecondary, fontSize: 12, fontWeight: '600' }}>Google 8.8.8.8</Text>
               <Text style={{ color: theme.text, fontSize: 20, fontWeight: '800', marginVertical: 4 }}>
-                {benchmark.googlePing} ms
+                {benchmark.googlePing ?? t("notMeasured")} ms
               </Text>
               <Text style={{ color: theme.textMuted, fontSize: 11, fontWeight: '500' }}>{t('secondaryFallback')}</Text>
             </View>
