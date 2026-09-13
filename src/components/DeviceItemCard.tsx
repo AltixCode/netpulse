@@ -12,15 +12,21 @@ interface DeviceItemCardProps {
 export const DeviceItemCard: React.FC<DeviceItemCardProps> = ({ device }) => {
   const theme = useTheme();
 
+  // Icon follows the advertised service type. MAC-prefix vendor lookup is not
+  // possible here: iOS cannot read a neighbour's hardware address without a
+  // special entitlement, which is why the previous vendor names were invented.
   const getDeviceIcon = () => {
-    if (device.isGateway) return <Router size={20} color={theme.primary} />;
-    if (device.vendor.includes('Apple') || device.vendor.includes('Samsung')) {
+    const service = device.service.toLowerCase();
+    if (service.includes('_airplay') || service.includes('_raop') || service.includes('_googlecast')) {
       return <Smartphone size={20} color={theme.success} />;
     }
-    if (device.vendor.includes('Raspberry') || device.vendor.includes('Espressif')) {
+    if (service.includes('_ssh') || service.includes('_rfb') || service.includes('_workstation')) {
+      return <Laptop size={20} color={theme.textSecondary} />;
+    }
+    if (service.includes('_hap') || service.includes('_homekit')) {
       return <Cpu size={20} color={theme.warning} />;
     }
-    return <Laptop size={20} color={theme.textSecondary} />;
+    return <Router size={20} color={theme.primary} />;
   };
 
   return (
@@ -58,37 +64,36 @@ export const DeviceItemCard: React.FC<DeviceItemCardProps> = ({ device }) => {
 
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: theme.text, fontFamily: 'monospace', fontWeight: '800', fontSize: 14, marginRight: 8 }}>
-              {device.ip}
+            <Text
+              style={{ color: theme.text, fontWeight: '800', fontSize: 14, marginRight: 8, flex: 1 }}
+              numberOfLines={1}
+            >
+              {device.name}
             </Text>
-            {device.isGateway && (
-              <View
-                style={{
-                  backgroundColor: theme.primaryLight,
-                  paddingHorizontal: 6,
-                  paddingVertical: 2,
-                  borderRadius: 6,
-                }}
-              >
-                <Text style={{ color: theme.primary, fontSize: 10, fontWeight: '800', textTransform: 'uppercase' }}>
-                  {t('router')}
-                </Text>
-              </View>
-            )}
           </View>
 
           <Text style={{ color: theme.textSecondary, fontSize: 12, fontWeight: '600', marginTop: 2 }} numberOfLines={1}>
-            {device.vendor}
+            {device.category}
           </Text>
-          <Text style={{ color: theme.textMuted, fontFamily: 'monospace', fontSize: 10, marginTop: 2 }}>
-            MAC: {device.mac}
+          <Text
+            style={{ color: theme.textMuted, fontFamily: 'monospace', fontSize: 10, marginTop: 2 }}
+            numberOfLines={1}
+          >
+            {device.service}
           </Text>
         </View>
       </View>
 
       <View style={{ alignItems: 'flex-end' }}>
-        <Text style={{ color: theme.success, fontFamily: 'monospace', fontSize: 13, fontWeight: '800' }}>
-          {device.latencyMs} ms
+        <Text
+          style={{
+            color: device.latencyMs === null ? theme.textMuted : theme.success,
+            fontFamily: 'monospace',
+            fontSize: 13,
+            fontWeight: '800',
+          }}
+        >
+          {device.latencyMs === null ? t('notMeasured') : `${Math.round(device.latencyMs)} ms`}
         </Text>
         {device.openPorts && device.openPorts.length > 0 && (
           <Text style={{ color: theme.textMuted, fontFamily: 'monospace', fontSize: 10, marginTop: 2 }}>

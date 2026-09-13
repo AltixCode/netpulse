@@ -37,7 +37,8 @@
     },
     "plugins": [
       "expo-router",
-      "./plugins/withIOSSceneLifecycle.js"
+      "./plugins/withIOSSceneLifecycle.js",
+      "./plugins/withLocalNetwork.js"
     ]
   }
 }

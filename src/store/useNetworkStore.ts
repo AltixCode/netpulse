@@ -8,8 +8,8 @@ interface NetworkState {
   isScanningSubnet: boolean;
   isBenchmarking: boolean;
   isPro: boolean;
-  localIp: string;
-  gatewayIp: string;
+  localIp: string | null;
+  gatewayIp: string | null;
 
   // Actions
   setBenchmark: (benchmark: NetworkBenchmark) => void;
@@ -23,20 +23,23 @@ interface NetworkState {
 
 export const useNetworkStore = create<NetworkState>((set) => ({
   benchmark: {
-    currentPing: 18,
-    averagePing: 21,
-    jitter: 3.2,
+    // Nothing has been measured yet, so nothing is claimed.
+    currentPing: null,
+    averagePing: null,
+    jitter: null,
     packetLoss: 0,
-    cloudflarePing: 16,
-    googlePing: 22,
-    history: [24, 22, 19, 18, 20, 25, 18, 17, 19, 21],
+    samplesSent: 0,
+    samplesReceived: 0,
+    cloudflarePing: null,
+    googlePing: null,
+    history: [],
   },
   devices: [],
   isScanningSubnet: false,
   isBenchmarking: false,
   isPro: false,
-  localIp: '192.168.1.104',
-  gatewayIp: '192.168.1.1',
+  localIp: null,
+  gatewayIp: null,
 
   setBenchmark: (benchmark) => set({ benchmark }),
   setDevices: (devices) => set({ devices }),

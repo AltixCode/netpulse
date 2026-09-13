@@ -4,8 +4,8 @@ import { NetworkBenchmark } from './pingEngine';
 export interface AuditReportData {
   benchmark: NetworkBenchmark;
   timestamp: string;
-  localIp: string;
-  gatewayIp: string;
+  localIp: string | null;
+  gatewayIp: string | null;
 }
 
 export const generateCsvReport = (data: AuditReportData): string => {
@@ -27,24 +27,26 @@ export const generateTextSummary = (data: AuditReportData): string => {
 NETPULSE ISP DIAGNOSTIC AUDIT REPORT
 ========================================
 Audit Generated: ${timestamp}
-Local Subnet IP: ${localIp}
-Default Gateway: ${gatewayIp}
+Local Subnet IP: ${localIp ?? "unknown"}
+Default Gateway: ${gatewayIp ?? "unknown"}
 
 SUMMARY METRICS:
 ----------------------------------------
-- Average Latency: ${benchmark.averagePing} ms
-- Current Latency: ${benchmark.currentPing} ms
-- Jitter Variance: ${benchmark.jitter} ms
+- Average Latency: ${benchmark.averagePing ?? "—"} ms
+- Current Latency: ${benchmark.currentPing ?? "—"} ms
+- Jitter Variance: ${benchmark.jitter ?? "—"} ms
 - Packet Loss:     ${benchmark.packetLoss}%
-- Cloudflare DNS:  ${benchmark.cloudflarePing} ms (1.1.1.1)
-- Google DNS:      ${benchmark.googlePing} ms (8.8.8.8)
+- Cloudflare DNS:  ${benchmark.cloudflarePing ?? "—"} ms (1.1.1.1)
+- Google DNS:      ${benchmark.googlePing ?? "—"} ms (8.8.8.8)
 
 STABILITY RATING:
 ----------------------------------------
 ${
-  benchmark.packetLoss > 0
-    ? 'CRITICAL: Packet loss detected. Severe upstream degradation.'
-    : benchmark.jitter > 15
+  benchmark.samplesReceived === 0
+    ? 'NO DATA: No probe was answered, so no rating can be given.'
+    : benchmark.packetLoss > 0
+    ? `CRITICAL: ${benchmark.packetLoss}% of probes went unanswered.`
+    : benchmark.jitter !== null && benchmark.jitter > 15
     ? 'WARNING: High jitter detected. Bufferbloat impacting live gaming/calls.'
     : 'OPTIMAL: Clean latency curve. Zero packet loss.'
 }

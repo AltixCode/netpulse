@@ -50,7 +50,7 @@ export default function ReportScreen() {
         icon: <AlertTriangle size={20} color={theme.danger} />,
       };
     }
-    if (benchmark.jitter > 15) {
+    if (benchmark.jitter !== null && benchmark.jitter > 15) {
       return {
         label: t('gradeB'),
         desc: t('gradeBDesc'),

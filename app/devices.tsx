@@ -45,11 +45,12 @@ export default function DevicesScreen() {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       setIsScanningSubnet(true);
-      setScanProgress({ current: 0, total: 6 });
+      setScanProgress({ current: 0, total: 0 });
 
-      const subnetPrefix = localIp.split('.').slice(0, 3).join('.');
-      const scannedDevices = await scanSubnetDevices(subnetPrefix, (current, total) => {
-        setScanProgress({ current, total });
+      // Discovery is a fixed-duration browse followed by port probes; there is
+      // no meaningful denominator until the browse finishes.
+      const scannedDevices = await scanSubnetDevices(5000, (discovered) => {
+        setScanProgress({ current: discovered, total: discovered });
       });
 
       setDevices(scannedDevices);
@@ -65,9 +66,9 @@ export default function DevicesScreen() {
   const filteredDevices = devices.filter((d) => {
     const q = searchQuery.toLowerCase();
     return (
-      d.ip.toLowerCase().includes(q) ||
-      d.vendor.toLowerCase().includes(q) ||
-      d.mac.toLowerCase().includes(q)
+      d.name.toLowerCase().includes(q) ||
+      d.category.toLowerCase().includes(q) ||
+      d.service.toLowerCase().includes(q)
     );
   });
 
@@ -98,7 +99,7 @@ export default function DevicesScreen() {
             <View>
               <Text style={{ color: theme.text, fontWeight: '700', fontSize: 16 }}>{t('localSubnetRange')}</Text>
               <Text style={{ color: theme.textSecondary, fontFamily: 'monospace', fontSize: 12, marginTop: 2 }}>
-                {localIp.split('.').slice(0, 3).join('.')}.0/24
+                {localIp ? `${localIp.split('.').slice(0, 3).join('.')}.0/24` : t('unknownNetwork')}
               </Text>
             </View>
           </View>

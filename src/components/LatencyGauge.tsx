@@ -5,9 +5,10 @@ import { useTheme } from '../theme/useTheme';
 import { t } from '../i18n';
 
 interface LatencyGaugeProps {
-  currentPing: number;
-  averagePing: number;
-  jitter: number;
+  /** Null until a probe has actually answered. */
+  currentPing: number | null;
+  averagePing: number | null;
+  jitter: number | null;
   history: number[];
 }
 
@@ -83,14 +84,14 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
         <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
           <Text
             style={{
-              color: getQualityColor(currentPing),
+              color: currentPing === null ? '#94A3B8' : getQualityColor(currentPing),
               fontSize: 56,
               fontWeight: '900',
               fontVariant: ['tabular-nums'],
               letterSpacing: -1,
             }}
           >
-            {currentPing}
+            {currentPing ?? t('notMeasured')}
           </Text>
           <Text
             style={{
@@ -154,7 +155,7 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
             {t('avgPing')}
           </Text>
           <Text style={{ color: theme.text, fontSize: 16, fontWeight: '800', marginTop: 4 }}>
-            {averagePing} ms
+            {averagePing ?? t('notMeasured')} ms
           </Text>
         </View>
 
@@ -165,7 +166,7 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
             {t('jitterVariance')}
           </Text>
           <Text style={{ color: theme.accent, fontSize: 16, fontWeight: '800', marginTop: 4 }}>
-            {jitter} ms
+            {jitter ?? t('notMeasured')} ms
           </Text>
         </View>
       </View>
