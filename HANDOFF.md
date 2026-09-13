@@ -34,7 +34,7 @@
 
 ## Verification Update — 2026-09-13
 
-* Pushed commit: `34ac777` on `main`.
+* Latest workflow commit: `8f0aa9a` on `main`; skipped Play uploads emit an explicit warning.
 * TypeScript: PASS — `rtk pnpm typecheck`
 * Production exports: PASS — `rtk pnpm export:ios`, `rtk pnpm export:android`
 * Observed GitHub Actions runs after push: `34745137301 (in_progress); 34745165188 (pending)` for `AltixCode/netpulse`.
