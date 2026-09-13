@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import {
@@ -70,7 +71,7 @@ export default function PaywallScreen() {
       desc: t('feat1Desc'),
     },
     {
-      icon: <Network size={20} color="#A855F7" />,
+      icon: <Network size={20} color={theme.feature} />,
       title: t('feat2Title'),
       desc: t('feat2Desc'),
     },
@@ -87,7 +88,7 @@ export default function PaywallScreen() {
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 24, paddingVertical: 16 }}>
+    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 24, paddingVertical: 16 }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 8, marginBottom: 16 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -98,6 +99,8 @@ export default function PaywallScreen() {
         </View>
         <TouchableOpacity
           onPress={() => router.back()}
+          accessibilityRole="button"
+          accessibilityLabel={t('cancel')}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           style={{ backgroundColor: theme.card, borderColor: theme.cardBorder, borderWidth: 1, padding: 8, borderRadius: 9999 }}
         >
@@ -164,6 +167,9 @@ export default function PaywallScreen() {
         <TouchableOpacity
           onPress={handlePurchase}
           disabled={loading}
+          accessibilityRole="button"
+          accessibilityLabel={t('lifetimeAccess')}
+          accessibilityState={{ disabled: loading, busy: loading }}
           activeOpacity={0.85}
           style={{
             backgroundColor: theme.primary,
@@ -178,22 +184,23 @@ export default function PaywallScreen() {
             shadowOpacity: 0.25,
             shadowRadius: 8,
             elevation: 4,
+            opacity: loading ? 0.65 : 1,
           }}
         >
           {loading ? (
-            <ActivityIndicator color="#FFFFFF" />
+            <ActivityIndicator color={theme.onPrimary} />
           ) : (
             <>
-              <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16, marginRight: 8 }}>
+              <Text style={{ color: theme.onPrimary, fontWeight: '800', fontSize: 16, marginRight: 8 }}>
                 {t('lifetimeAccess')}
               </Text>
-              <Check size={18} color="#FFFFFF" strokeWidth={3} />
+              <Check size={18} color={theme.onPrimary} strokeWidth={3} />
             </>
           )}
         </TouchableOpacity>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 14 }}>
-          <TouchableOpacity onPress={handleRestore} disabled={loading} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+          <TouchableOpacity onPress={handleRestore} disabled={loading} accessibilityRole="button" accessibilityLabel={t('restorePurchases')} accessibilityState={{ disabled: loading }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
             <Text style={{ color: theme.textSecondary, fontSize: 12, textDecorationLine: 'underline' }}>
               {t('restorePurchases')}
             </Text>
@@ -202,6 +209,6 @@ export default function PaywallScreen() {
           <Text style={{ color: theme.textMuted, fontSize: 12 }}>{t('oneTimePayment')}</Text>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

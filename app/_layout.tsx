@@ -33,6 +33,8 @@ export default function RootLayout() {
             !isPro ? (
               <TouchableOpacity
                 onPress={() => router.push('/paywall')}
+                accessibilityRole="button"
+                accessibilityLabel={t('paywallTitle')}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 style={{
                   backgroundColor: theme.warningLight,

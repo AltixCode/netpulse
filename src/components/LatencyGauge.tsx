@@ -35,7 +35,7 @@ export const LatencyGauge: React.FC<LatencyGaugeProps> = ({
         borderRadius: 24,
         padding: 20,
         marginBottom: 20,
-        shadowColor: '#000000',
+        shadowColor: theme.shadow,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: theme.isDark ? 0.3 : 0.06,
         shadowRadius: 12,
