@@ -37,7 +37,7 @@
 * Pushed commit: `34ac777` on `main`.
 * TypeScript: PASS — `rtk pnpm typecheck`
 * Production exports: PASS — `rtk pnpm export:ios`, `rtk pnpm export:android`
-* Local CI run status: `gh run list` returned no runs for `AltixCode/netpulse`.
+* Observed GitHub Actions runs after push: `34745137301 (in_progress); 34745165188 (pending)` for `AltixCode/netpulse`.
 * Workflow topology updated: iOS on `[self-hosted, macOS, ARM64]`; Android then GitHub Release on `[self-hosted, linux, x64]`; repository concurrency remains serialized.
 * Google Play upload now requires the `PLAY_STORE_SERVICE_ACCOUNT_JSON` repository secret. Store status: UNKNOWN.
 * Physical simulator/emulator interaction and zero-console-error QA: NOT RUN in this pass.
