@@ -40,7 +40,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
       desc: t('feat1Desc'),
     },
     {
-      icon: <Network size={20} color="#A855F7" />,
+      icon: <Network size={20} color={theme.purple} />,
       title: t('feat2Title'),
       desc: t('feat2Desc'),
     },
