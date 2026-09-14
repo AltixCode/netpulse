@@ -59,6 +59,11 @@ export default function PaywallScreen() {
         </View>
         <TouchableOpacity
           onPress={() => router.back()}
+          // An icon-only button with no label reaches VoiceOver as "button" and
+          // nothing else, which on the one control that dismisses a paywall is
+          // the worst place for it.
+          accessibilityRole="button"
+          accessibilityLabel={t('cancel')}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           style={{ backgroundColor: theme.card, borderColor: theme.cardBorder, borderWidth: 1, padding: 8, borderRadius: 9999 }}
         >
