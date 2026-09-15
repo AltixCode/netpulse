@@ -11,18 +11,26 @@ export interface ThemeColors {
   textMuted: string;
   primary: string;
   onPrimary: string;
+  onPrimaryMuted: string;
   primaryLight: string;
   primaryBorder: string;
   accent: string;
   accentLight: string;
   accentBorder: string;
   warning: string;
+  onWarning: string;
   warningLight: string;
+  warningBorder: string;
   success: string;
   successLight: string;
+  successBorder: string;
   danger: string;
   controlSurface: string;
   purple: string;
+  dangerLight: string;
+  dangerBorder: string;
+  shadow: string;
+  overlay: string;
   headerBackground: string;
   headerTintColor: string;
   statusBarStyle: 'light' | 'dark';
@@ -55,6 +63,14 @@ export const useTheme = (): ThemeColors => {
     danger: isDark ? '#EF4444' : '#DC2626',
     controlSurface: isDark ? '#1E293B' : '#F1F5F9',
     purple: isDark ? '#A855F7' : '#7E22CE',
+    onPrimaryMuted: 'rgba(255, 255, 255, 0.78)',
+    onWarning: '#111827',
+    warningBorder: isDark ? 'rgba(245, 158, 11, 0.35)' : 'rgba(245, 158, 11, 0.25)',
+    successBorder: isDark ? 'rgba(16, 185, 129, 0.35)' : 'rgba(16, 185, 129, 0.25)',
+    dangerLight: isDark ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)',
+    dangerBorder: isDark ? 'rgba(239, 68, 68, 0.35)' : 'rgba(239, 68, 68, 0.25)',
+    shadow: '#000000',
+    overlay: 'rgba(0, 0, 0, 0.65)',
     headerBackground: isDark ? '#090D16' : '#FFFFFF',
     headerTintColor: isDark ? '#F8FAFC' : '#0F172A',
     statusBarStyle: isDark ? 'light' : 'dark',

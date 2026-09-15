@@ -48,7 +48,16 @@ export default function RootLayout() {
                 accessibilityRole="button"
                 accessibilityLabel={t('paywallTitle')}
                 hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-                style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 4, paddingVertical: 4 }}
+                style={{
+                  backgroundColor: theme.warningLight,
+                  borderColor: theme.warning,
+                  borderWidth: 1,
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                  borderRadius: 9999,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
               >
                 <Crown size={15} color={theme.warning} />
                 <Text style={{ color: theme.warning, fontSize: 12, fontWeight: '700', marginLeft: 6 }}>

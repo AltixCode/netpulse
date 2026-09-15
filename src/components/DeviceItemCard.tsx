@@ -41,7 +41,7 @@ export const DeviceItemCard: React.FC<DeviceItemCardProps> = ({ device }) => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        shadowColor: '#000000',
+        shadowColor: theme.shadow,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: theme.isDark ? 0.2 : 0.04,
         shadowRadius: 6,

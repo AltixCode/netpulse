@@ -58,7 +58,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.65)', justifyContent: 'flex-end' }}>
+      <View style={{ flex: 1, backgroundColor: theme.overlay, justifyContent: 'flex-end' }}>
         <View
           style={{
             backgroundColor: theme.background,
@@ -68,7 +68,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
             borderTopRightRadius: 32,
             padding: 24,
             maxHeight: '90%',
-            shadowColor: '#000000',
+            shadowColor: theme.shadow,
             shadowOffset: { width: 0, height: -4 },
             shadowOpacity: 0.25,
             shadowRadius: 16,
@@ -150,6 +150,9 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
           <TouchableOpacity
             onPress={handlePurchase}
             disabled={loading}
+            accessibilityRole="button"
+            accessibilityLabel={t('lifetimeAccess')}
+            accessibilityState={{ disabled: loading, busy: loading }}
             activeOpacity={0.85}
             style={{
               backgroundColor: theme.primary,
@@ -164,23 +167,24 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
               shadowOpacity: 0.25,
               shadowRadius: 8,
               elevation: 4,
+              opacity: loading ? 0.65 : 1,
             }}
           >
             {loading ? (
-              <ActivityIndicator color="#FFFFFF" />
+              <ActivityIndicator color={theme.onPrimary} />
             ) : (
               <>
-                <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16, marginRight: 8 }}>
+                <Text style={{ color: theme.onPrimary, fontWeight: '800', fontSize: 16, marginRight: 8 }}>
                   {ctaLabel}
                 </Text>
-                <Check size={18} color="#FFFFFF" strokeWidth={3} />
+                <Check size={18} color={theme.onPrimary} strokeWidth={3} />
               </>
             )}
           </TouchableOpacity>
 
           {/* Restore & Policy Links */}
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 14 }}>
-            <TouchableOpacity onPress={handleRestore} disabled={loading} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+            <TouchableOpacity onPress={handleRestore} disabled={loading} accessibilityRole="button" accessibilityLabel={t('restorePurchases')} accessibilityState={{ disabled: loading }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
               <Text style={{ color: theme.textSecondary, fontSize: 12, textDecorationLine: 'underline' }}>
                 {t('restorePurchases')}
               </Text>

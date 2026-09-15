@@ -36,6 +36,7 @@ export default function ReportScreen() {
   const { benchmark, localIp, gatewayIp, isPro } = useNetworkStore();
   const [exporting, setExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [exportFailed, setExportFailed] = useState(false);
 
   const timestamp = new Date().toLocaleString();
 
@@ -45,8 +46,8 @@ export default function ReportScreen() {
         label: t('gradeC'),
         desc: t('gradeCDesc'),
         color: theme.danger,
-        bg: theme.isDark ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)',
-        border: theme.isDark ? 'rgba(239, 68, 68, 0.35)' : 'rgba(239, 68, 68, 0.25)',
+        bg: theme.dangerLight,
+        border: theme.dangerBorder,
         icon: <AlertTriangle size={20} color={theme.danger} />,
       };
     }
@@ -55,8 +56,8 @@ export default function ReportScreen() {
         label: t('gradeB'),
         desc: t('gradeBDesc'),
         color: theme.warning,
-        bg: theme.isDark ? 'rgba(245, 158, 11, 0.15)' : 'rgba(245, 158, 11, 0.08)',
-        border: theme.isDark ? 'rgba(245, 158, 11, 0.35)' : 'rgba(245, 158, 11, 0.25)',
+        bg: theme.warningLight,
+        border: theme.warningBorder,
         icon: <AlertTriangle size={20} color={theme.warning} />,
       };
     }
@@ -64,8 +65,8 @@ export default function ReportScreen() {
       label: t('gradeA'),
       desc: t('gradeADesc'),
       color: theme.success,
-      bg: theme.isDark ? 'rgba(16, 185, 129, 0.15)' : 'rgba(16, 185, 129, 0.08)',
-      border: theme.isDark ? 'rgba(16, 185, 129, 0.35)' : 'rgba(16, 185, 129, 0.25)',
+      bg: theme.successLight,
+      border: theme.successBorder,
       icon: <CheckCircle2 size={20} color={theme.success} />,
     };
   };
@@ -79,6 +80,7 @@ export default function ReportScreen() {
     }
 
     try {
+      setExportFailed(false);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       setExporting(true);
 
@@ -92,15 +94,15 @@ export default function ReportScreen() {
       const filename = `NetPulse_Audit_${Date.now()}.csv`;
       const filePath = await saveReportFile(filename, csvData);
 
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(filePath, {
-          mimeType: 'text/csv',
-          dialogTitle: t('exportCsvDialog'),
-          UTI: 'public.comma-separated-values-text',
-        });
-      }
+      if (!(await Sharing.isAvailableAsync())) throw new Error('Sharing unavailable');
+      await Sharing.shareAsync(filePath, {
+        mimeType: 'text/csv',
+        dialogTitle: t('exportCsvDialog'),
+        UTI: 'public.comma-separated-values-text',
+      });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch {
+      setExportFailed(true);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     } finally {
       setExporting(false);
@@ -114,6 +116,7 @@ export default function ReportScreen() {
     }
 
     try {
+      setExportFailed(false);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       setExporting(true);
 
@@ -127,15 +130,15 @@ export default function ReportScreen() {
       const filename = `NetPulse_Audit_Summary_${Date.now()}.txt`;
       const filePath = await saveReportFile(filename, textData);
 
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(filePath, {
-          mimeType: 'text/plain',
-          dialogTitle: t('exportSummaryDialog'),
-          UTI: 'public.plain-text',
-        });
-      }
+      if (!(await Sharing.isAvailableAsync())) throw new Error('Sharing unavailable');
+      await Sharing.shareAsync(filePath, {
+        mimeType: 'text/plain',
+        dialogTitle: t('exportSummaryDialog'),
+        UTI: 'public.plain-text',
+      });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch {
+      setExportFailed(true);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     } finally {
       setExporting(false);
@@ -277,6 +280,8 @@ export default function ReportScreen() {
         {!isPro && (
           <TouchableOpacity
             onPress={() => setShowPaywall(true)}
+            accessibilityRole="button"
+            accessibilityLabel={t('exportLocked')}
             activeOpacity={0.85}
             style={{
               backgroundColor: theme.warningLight,
@@ -301,7 +306,7 @@ export default function ReportScreen() {
               </View>
             </View>
             <View style={{ backgroundColor: theme.warning, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 9999 }}>
-              <Text style={{ color: '#000000', fontWeight: '800', fontSize: 12 }}>{t('unlock')}</Text>
+              <Text style={{ color: theme.onWarning, fontWeight: '800', fontSize: 12 }}>{t('unlock')}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -316,6 +321,9 @@ export default function ReportScreen() {
           <TouchableOpacity
             onPress={handleExportCsv}
             disabled={exporting}
+            accessibilityRole="button"
+            accessibilityLabel={t('exportCsv')}
+            accessibilityState={{ disabled: exporting, busy: exporting }}
             activeOpacity={0.85}
             style={{
               backgroundColor: theme.primary,
@@ -330,23 +338,24 @@ export default function ReportScreen() {
               shadowOpacity: 0.25,
               shadowRadius: 8,
               elevation: 4,
+              opacity: exporting ? 0.65 : 1,
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FileSpreadsheet size={22} color="#FFFFFF" />
+              <FileSpreadsheet size={22} color={theme.onPrimary} />
               <View style={{ marginLeft: 12 }}>
-                <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16 }}>{t('exportCsv')}</Text>
-                <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, marginTop: 2 }}>
+                <Text style={{ color: theme.onPrimary, fontWeight: '800', fontSize: 16 }}>{t('exportCsv')}</Text>
+                <Text style={{ color: theme.onPrimaryMuted, fontSize: 12, marginTop: 2 }}>
                   {t('exportCsvDesc')}
                 </Text>
               </View>
             </View>
             {exporting ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
+              <ActivityIndicator size="small" color={theme.onPrimary} />
             ) : !isPro ? (
-              <Lock size={18} color="rgba(255,255,255,0.7)" />
+              <Lock size={18} color={theme.onPrimaryMuted} />
             ) : (
-              <Share2 size={18} color="#FFFFFF" />
+              <Share2 size={18} color={theme.onPrimary} />
             )}
           </TouchableOpacity>
 
@@ -354,6 +363,9 @@ export default function ReportScreen() {
           <TouchableOpacity
             onPress={handleExportSummary}
             disabled={exporting}
+            accessibilityRole="button"
+            accessibilityLabel={t('exportSummary')}
+            accessibilityState={{ disabled: exporting, busy: exporting }}
             activeOpacity={0.85}
             style={{
               backgroundColor: theme.card,
@@ -365,6 +377,7 @@ export default function ReportScreen() {
               alignItems: 'center',
               justifyContent: 'space-between',
               minHeight: 56,
+              opacity: exporting ? 0.65 : 1,
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -385,6 +398,12 @@ export default function ReportScreen() {
             )}
           </TouchableOpacity>
         </View>
+
+        {exportFailed && (
+          <Text accessibilityRole="alert" style={{ color: theme.danger, marginTop: -8, marginBottom: 20, textAlign: 'center', fontWeight: '600' }}>
+            {t('error')}
+          </Text>
+        )}
 
         {/* Audit Samples Table Preview */}
         <View

@@ -40,9 +40,11 @@ export default function DevicesScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [scanProgress, setScanProgress] = useState<{ current: number; total: number } | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [scanFailed, setScanFailed] = useState(false);
 
   const handleStartScan = async () => {
     try {
+      setScanFailed(false);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       setIsScanningSubnet(true);
       setScanProgress({ current: 0, total: 0 });
@@ -56,6 +58,7 @@ export default function DevicesScreen() {
       setDevices(scannedDevices);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch {
+      setScanFailed(true);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     } finally {
       setIsScanningSubnet(false);
@@ -84,7 +87,7 @@ export default function DevicesScreen() {
           padding: 20,
           marginTop: 12,
           marginBottom: 16,
-          shadowColor: '#000000',
+          shadowColor: theme.shadow,
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: theme.isDark ? 0.25 : 0.05,
           shadowRadius: 8,
@@ -116,6 +119,9 @@ export default function DevicesScreen() {
         <TouchableOpacity
           onPress={handleStartScan}
           disabled={isScanningSubnet}
+          accessibilityRole="button"
+          accessibilityLabel={devices.length > 0 ? t('rescanDevices') : t('startArpSweep')}
+          accessibilityState={{ disabled: isScanningSubnet, busy: isScanningSubnet }}
           activeOpacity={0.85}
           style={{
             backgroundColor: theme.success,
@@ -126,12 +132,13 @@ export default function DevicesScreen() {
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: 48,
+            opacity: isScanningSubnet ? 0.65 : 1,
           }}
         >
           {isScanningSubnet ? (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <ActivityIndicator size="small" color="#FFFFFF" />
-              <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 14, marginLeft: 8 }}>
+              <ActivityIndicator size="small" color={theme.onPrimary} />
+              <Text style={{ color: theme.onPrimary, fontWeight: '800', fontSize: 14, marginLeft: 8 }}>
                 {t('sweepingSubnet', {
                   current: scanProgress ? scanProgress.current : 0,
                   total: scanProgress ? scanProgress.total : 6,
@@ -140,8 +147,8 @@ export default function DevicesScreen() {
             </View>
           ) : (
             <>
-              <RefreshCw size={16} color="#FFFFFF" />
-              <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 15, marginLeft: 8 }}>
+              <RefreshCw size={16} color={theme.onPrimary} />
+              <Text style={{ color: theme.onPrimary, fontWeight: '800', fontSize: 15, marginLeft: 8 }}>
                 {devices.length > 0 ? t('rescanDevices') : t('startArpSweep')}
               </Text>
             </>
@@ -149,10 +156,18 @@ export default function DevicesScreen() {
         </TouchableOpacity>
       </View>
 
+      {scanFailed && (
+        <Text accessibilityRole="alert" style={{ color: theme.danger, marginBottom: 16, textAlign: 'center', fontWeight: '600' }}>
+          {t('error')}
+        </Text>
+      )}
+
       {/* Pro Port Scanner Banner */}
       {!isPro && (
         <TouchableOpacity
           onPress={() => setShowPaywall(true)}
+          accessibilityRole="button"
+          accessibilityLabel={t('portScannerLocked')}
           activeOpacity={0.85}
           style={{
             backgroundColor: theme.warningLight,
@@ -177,7 +192,7 @@ export default function DevicesScreen() {
             </View>
           </View>
           <View style={{ backgroundColor: theme.warning, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 9999 }}>
-            <Text style={{ color: '#000000', fontWeight: '800', fontSize: 12 }}>{t('unlock')}</Text>
+            <Text style={{ color: theme.onWarning, fontWeight: '800', fontSize: 12 }}>{t('unlock')}</Text>
           </View>
         </TouchableOpacity>
       )}
@@ -203,6 +218,7 @@ export default function DevicesScreen() {
             onChangeText={setSearchQuery}
             placeholder={t('searchPlaceholder')}
             placeholderTextColor={theme.textMuted}
+            accessibilityLabel={t('searchPlaceholder')}
             style={{
               flex: 1,
               color: theme.text,

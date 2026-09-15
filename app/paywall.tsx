@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator,
   Linking,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import {
   Sparkles,
@@ -39,7 +40,7 @@ export default function PaywallScreen() {
       desc: t('feat1Desc'),
     },
     {
-      icon: <Network size={20} color="#A855F7" />,
+      icon: <Network size={20} color={theme.purple} />,
       title: t('feat2Title'),
       desc: t('feat2Desc'),
     },
@@ -56,7 +57,7 @@ export default function PaywallScreen() {
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 24, paddingVertical: 16 }}>
+    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 24, paddingVertical: 16 }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 8, marginBottom: 16 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -138,6 +139,9 @@ export default function PaywallScreen() {
         <TouchableOpacity
           onPress={handlePurchase}
           disabled={loading}
+          accessibilityRole="button"
+          accessibilityLabel={t('lifetimeAccess')}
+          accessibilityState={{ disabled: loading, busy: loading }}
           activeOpacity={0.85}
           style={{
             backgroundColor: theme.primary,
@@ -152,22 +156,23 @@ export default function PaywallScreen() {
             shadowOpacity: 0.25,
             shadowRadius: 8,
             elevation: 4,
+            opacity: loading ? 0.65 : 1,
           }}
         >
           {loading ? (
-            <ActivityIndicator color="#FFFFFF" />
+            <ActivityIndicator color={theme.onPrimary} />
           ) : (
             <>
-              <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16, marginRight: 8 }}>
+              <Text style={{ color: theme.onPrimary, fontWeight: '800', fontSize: 16, marginRight: 8 }}>
                 {ctaLabel}
               </Text>
-              <Check size={18} color="#FFFFFF" strokeWidth={3} />
+              <Check size={18} color={theme.onPrimary} strokeWidth={3} />
             </>
           )}
         </TouchableOpacity>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 14 }}>
-          <TouchableOpacity onPress={handleRestore} disabled={loading} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+          <TouchableOpacity onPress={handleRestore} disabled={loading} accessibilityRole="button" accessibilityLabel={t('restorePurchases')} accessibilityState={{ disabled: loading }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
             <Text style={{ color: theme.textSecondary, fontSize: 12, textDecorationLine: 'underline' }}>
               {t('restorePurchases')}
             </Text>
@@ -197,6 +202,6 @@ export default function PaywallScreen() {
         </View>
 
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

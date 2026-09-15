@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -30,6 +30,7 @@ export default function HomeScreen() {
   const offerPrivacyOptions = useAdsStore((state) => state.consent.offerPrivacyOptions);
   const router = useRouter();
   const theme = useTheme();
+  const [benchmarkFailed, setBenchmarkFailed] = useState(false);
   const {
     benchmark,
     isBenchmarking,
@@ -55,6 +56,7 @@ export default function HomeScreen() {
 
   const handleRunTest = async () => {
     try {
+      setBenchmarkFailed(false);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       // The ad goes here, before the next test starts, rather than after one finishes: results
       // are the whole point of the screen, and covering them the moment they appear is the
@@ -68,6 +70,9 @@ export default function HomeScreen() {
 
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       await useAdsStore.getState().recordCompletion();
+    } catch {
+      setBenchmarkFailed(true);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     } finally {
       setIsBenchmarking(false);
     }
@@ -117,6 +122,9 @@ export default function HomeScreen() {
         <TouchableOpacity
           onPress={handleRunTest}
           disabled={isBenchmarking}
+          accessibilityRole="button"
+          accessibilityLabel={t('benchmarkNow')}
+          accessibilityState={{ disabled: isBenchmarking, busy: isBenchmarking }}
           activeOpacity={0.85}
           style={{
             backgroundColor: theme.primary,
@@ -133,19 +141,26 @@ export default function HomeScreen() {
             shadowOpacity: 0.25,
             shadowRadius: 8,
             elevation: 4,
+            opacity: isBenchmarking ? 0.65 : 1,
           }}
         >
           {isBenchmarking ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={theme.onPrimary} />
           ) : (
             <>
-              <RefreshCw size={18} color="#FFFFFF" />
-              <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16, marginLeft: 8 }}>
+              <RefreshCw size={18} color={theme.onPrimary} />
+              <Text style={{ color: theme.onPrimary, fontWeight: '800', fontSize: 16, marginLeft: 8 }}>
                 {t('benchmarkNow')}
               </Text>
             </>
           )}
         </TouchableOpacity>
+
+        {benchmarkFailed && (
+          <Text accessibilityRole="alert" style={{ color: theme.danger, marginTop: -8, marginBottom: 20, textAlign: 'center', fontWeight: '600' }}>
+            {t('error')}
+          </Text>
+        )}
 
         {/* DNS Comparison Grid */}
         <View
@@ -207,6 +222,8 @@ export default function HomeScreen() {
           {/* Subnet Scanner Card */}
           <TouchableOpacity
             onPress={() => router.push('/devices')}
+            accessibilityRole="button"
+            accessibilityLabel={t('subnetCardTitle')}
             activeOpacity={0.8}
             style={{
               backgroundColor: theme.card,
@@ -237,6 +254,8 @@ export default function HomeScreen() {
           {/* ISP Audit Report Card */}
           <TouchableOpacity
             onPress={() => router.push('/report')}
+            accessibilityRole="button"
+            accessibilityLabel={t('ispCardTitle')}
             activeOpacity={0.8}
             style={{
               backgroundColor: theme.card,
