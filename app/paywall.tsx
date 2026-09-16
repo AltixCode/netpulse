@@ -18,11 +18,13 @@ import { useNetworkStore } from '../src/store/useNetworkStore';
 import { usePaywall } from '../src/hooks/usePaywall';
 import { PRIVACY_POLICY_URL, TERMS_OF_USE_URL } from '../src/config/legal';
 import { useTheme } from '../src/theme/useTheme';
+import { useTabletColumn } from '../src/theme/useTabletColumn';
 import { t } from '../src/i18n';
 
 export default function PaywallScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const tabletColumn = useTabletColumn();
   const { ctaLabel, loading, errorMsg, handlePurchase, handleRestore } =
     usePaywall(() => router.back());
 
@@ -80,7 +82,7 @@ export default function PaywallScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }} contentContainerStyle={tabletColumn}>
         {/* Anti-Subscription Banner */}
         <View
           style={{
