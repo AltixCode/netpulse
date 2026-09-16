@@ -28,11 +28,13 @@ import {
 } from '../src/engine/reportEngine';
 import { PaywallModal } from '../src/components/PaywallModal';
 import { useTheme } from '../src/theme/useTheme';
+import { useTabletColumn } from '../src/theme/useTabletColumn';
 import { t } from '../src/i18n';
 
 export default function ReportScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const tabletColumn = useTabletColumn();
   const { benchmark, localIp, gatewayIp, isPro } = useNetworkStore();
   const [exporting, setExporting] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
@@ -147,7 +149,7 @@ export default function ReportScreen() {
 
   return (
     <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 20 }}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 , ...tabletColumn}}>
         {/* Header Info */}
         <View style={{ marginTop: 12, marginBottom: 16 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>

@@ -15,6 +15,7 @@ import { useNetworkStore } from '../src/store/useNetworkStore';
 import { runNetworkBenchmark } from '../src/engine/pingEngine';
 import { LatencyGauge } from '../src/components/LatencyGauge';
 import { useTheme } from '../src/theme/useTheme';
+import { useTabletColumn } from '../src/theme/useTabletColumn';
 import { t } from '../src/i18n';
 import { ForwardArrow } from '../src/components/DirectionalIcons';
 import { AdBanner } from '../src/components/AdBanner';
@@ -30,6 +31,7 @@ export default function HomeScreen() {
   const offerPrivacyOptions = useAdsStore((state) => state.consent.offerPrivacyOptions);
   const router = useRouter();
   const theme = useTheme();
+  const tabletColumn = useTabletColumn();
   const [benchmarkFailed, setBenchmarkFailed] = useState(false);
   const {
     benchmark,
@@ -80,7 +82,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background, paddingHorizontal: 20 }}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 , ...tabletColumn}}>
         {/* Header Hero */}
         <View style={{ marginTop: 12, marginBottom: 20 }}>
           <View

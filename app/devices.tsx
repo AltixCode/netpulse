@@ -22,11 +22,13 @@ import { scanSubnetDevices } from '../src/engine/subnetScanner';
 import { DeviceItemCard } from '../src/components/DeviceItemCard';
 import { PaywallModal } from '../src/components/PaywallModal';
 import { useTheme } from '../src/theme/useTheme';
+import { useTabletColumn } from '../src/theme/useTabletColumn';
 import { t } from '../src/i18n';
 
 export default function DevicesScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const tabletColumn = useTabletColumn();
   const {
     devices,
     setDevices,
@@ -231,7 +233,7 @@ export default function DevicesScreen() {
       )}
 
       {/* Device List */}
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 , ...tabletColumn}}>
         {devices.length === 0 && !isScanningSubnet ? (
           <View
             style={{
