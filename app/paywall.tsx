@@ -142,7 +142,12 @@ export default function PaywallScreen() {
           onPress={handlePurchase}
           disabled={loading}
           accessibilityRole="button"
-          accessibilityLabel={t('lifetimeAccess')}
+          // The accessible name must be the SAME string the button shows.
+          // t('lifetimeAccess') is 'Unlock Lifetime Access — {price}'
+          // and this called it with no values, so VoiceOver read the
+          // literal "{price}" while the visible label said $4.99.
+          // ctaLabel is that string already interpolated.
+          accessibilityLabel={ctaLabel}
           accessibilityState={{ disabled: loading, busy: loading }}
           activeOpacity={0.85}
           style={{
