@@ -7,6 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Linking,
+  useWindowDimensions,
 } from 'react-native';
 import {
   Sparkles,
@@ -30,6 +31,16 @@ interface PaywallModalProps {
 
 export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) => {
   const theme = useTheme();
+  // On a tablet this stops being a bottom sheet and becomes a centred card.
+  //
+  // A sheet anchored to the bottom of a 13" iPad leaves more than half the
+  // display as dimmed backdrop above it, and the purchase -- the whole reason
+  // the sheet exists -- sits in the last third of the screen. The bottom
+  // anchor is a phone idiom: it puts the content within reach of a thumb.
+  // There is no thumb at this size.
+  const { width: screenWidth } = useWindowDimensions();
+  const isTablet = screenWidth >= 700;
+
   const { ctaLabel, loading, errorMsg, handlePurchase, handleRestore } =
     usePaywall(onClose);
 
@@ -58,7 +69,14 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
-      <View style={{ flex: 1, backgroundColor: theme.overlay, justifyContent: 'flex-end' }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: theme.overlay,
+          justifyContent: isTablet ? 'center' : 'flex-end',
+          alignItems: isTablet ? 'center' : 'stretch',
+        }}
+      >
         <View
           style={{
             backgroundColor: theme.background,
@@ -68,6 +86,9 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
             borderTopRightRadius: 32,
             padding: 24,
             maxHeight: '90%',
+            ...(isTablet
+              ? { maxWidth: 640, width: '100%' as const, borderRadius: 32, borderWidth: 1 }
+              : null),
             shadowColor: theme.shadow,
             shadowOffset: { width: 0, height: -4 },
             shadowOpacity: 0.25,
