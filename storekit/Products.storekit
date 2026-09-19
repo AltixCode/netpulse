@@ -1,0 +1,35 @@
+{
+  "identifier": "71640E09-74D8-4B07-856E-B49C333396A2",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "4.99",
+      "familyShareable": false,
+      "internalID": "08FA174E-9406-40EB-8F06-ED439460B4C6",
+      "localizations": [
+        {
+          "description": "netpulse remove ads lifetime unlock",
+          "displayName": "netpulse remove ads",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.altixcode.netpulse.removeads",
+      "referenceName": "netpulse remove ads",
+      "type": "NonConsumable"
+    }
+  ],
+  "settings": {
+    "_applicationInternalID": "",
+    "_developerTeamID": "",
+    "_failTransactionsEnabled": false,
+    "_lastSynchronizedDate": 0,
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_storeKitErrors": []
+  },
+  "subscriptionGroups": [],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}
